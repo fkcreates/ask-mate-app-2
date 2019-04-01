@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+<h1>Add new question</h1>
+    <form action="{{ url_for("add_question") }}", method="POST">
+        <p>Question title<br>
+        <input type="text" name="title" required minlength="10">
+        </p>
+
+        <p>Question message<br>
+        <textarea cols="50" rows="10" name="message" autofocus required minlength="10"></textarea>
+        </p>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+<a href="{{ url_for("list_question") }}">Go back to main page</a>
+
+{% endblock %}

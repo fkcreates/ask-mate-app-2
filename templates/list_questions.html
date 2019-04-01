@@ -6,28 +6,23 @@
 
 {% block content %}
 <h1>Listing questions</h1>
+<a href="{{ url_for("route_question") }}">Add new question</a>
 <table>
     <thead>
         <tr>
-            <th>ID</th>
             <th>Submission time</th>
             <th>View number</th>
             <th>Vote number</th>
             <th>Title</th>
-            <th>Message</th>
-            <th>Image</th>
         </tr>
     </thead>
     <tbody>
     {% for row in data %}
         <tr>
-            <td>{{ row["id"] }}</td>
             <td>{{ row["submission_time"] }}</td>
             <td>{{ row["view_number"] }}</td>
             <td>{{ row["vote_number"] }}</td>
-            <td>{{ row["title"] }}</td>
-            <td>{{ row["message"] }}</td>
-            <td>{{ row["image"] }}</td>
+            <td><a href="{{ url_for("display_question", question_id=row["id"])}}">{{ row["title"] }}</a></td>
         </tr>
     {% endfor %}
     </tbody>

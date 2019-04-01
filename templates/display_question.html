@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+    <h3>Question</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Submission time</th>
+            <th>View number</th>
+            <th>Vote number</th>
+            <th>Title</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for row in questions %}
+        {% if row["id"] == question_id %}
+        <tr>
+            <td>{{ row["submission_time"] }}</td>
+            <td>{{ row["view_number"] }}</td>
+            <td>{{ row["vote_number"] }}</td>
+            <td>{{ row["title"] }}</td>
+            <td>{{ row["message"] }}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+    <br>
+    <h3>Answers</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Submission time</th>
+            <th>Vote number</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for answer in answers %}
+        {% if answer["question_id"] == question_id %}
+        <tr>
+            <td>{{ answer["submission_time"] }}</td>
+            <td>{{ answer["vote_number"] }}</td>
+            <td>{{ answer["message"] }}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+<br>
+<a href="{{ url_for("list_question") }}">Go back to main page</a>
+
+
+{% endblock %}
