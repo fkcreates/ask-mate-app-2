@@ -4,8 +4,8 @@ ANSWER_FILE_PATH = "answers.csv"
 QUESTION_FILE_PATH = "questions.csv"
 
 ANSWERS_HEADER = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
-
 QUESTIONS_HEADER = [ "id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+
 
 def get_data_from_file(filename):
     data = []
@@ -19,9 +19,6 @@ def get_data_from_file(filename):
 
     return data
 
-
-
-dictionary = {"id" : 12}
 
 def write_data_to_file(dictionary, filename, fieldnames):
     data = get_data_from_file(filename)
