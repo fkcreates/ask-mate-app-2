@@ -45,4 +45,3 @@ def sort_data_by_time(data):
     return sorted_data
 
 
-generate_timestamp()

@@ -32,6 +32,8 @@
     </tbody>
 </table>
     <br>
+    <p><a href="{{ url_for("edit_question", question_id=question_id) }}">Edit question</a></p>
+    <br>
     <a href="{{ url_for("post_answer", question_id=question_id) }}">Add new answer</a>
     <h3>Answers</h3>
 <table>

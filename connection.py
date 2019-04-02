@@ -33,5 +33,17 @@ def write_data_to_file(dictionary, filename, fieldnames):
         writer.writerow(dictionary)
 
 
+def update_question(edited_question, question_id):
+    data = get_data_from_file(QUESTION_FILE_PATH)
 
+    with open(QUESTION_FILE_PATH, "w") as file:
+        writer = csv.DictWriter(file, fieldnames=QUESTIONS_HEADER)
+        writer.writeheader()
 
+        for question in data:
+            if question["id"] == question_id:
+                writer.writerow(edited_question)
+            else:
+                writer.writerow(question)
+
+    return data
