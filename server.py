@@ -59,6 +59,23 @@ def add_question():
     return redirect(url_for("list_question"))
 
 
+@app.route('/question/<question_id>/are-you-sure', methods=["GET"])
+def confirm_delete_question(question_id):
+
+    return render_template("confirm_delete_question.html",
+                           question_id=question_id,
+                           title="Are you sure you want to delete this question?")
+
+
+@app.route('/question/<question_id>/are-you-sure', methods=["POST"])
+def delete_question(question_id):
+
+    data_manager.delete_question(question_id)
+    data_manager.delete_answers_for_deleted_question(question_id)
+
+    return redirect(url_for("list_question"))
+
+
 @app.route('/question/<question_id>/new-answer', methods = ["GET"])
 def route_new_answer(question_id):
 
