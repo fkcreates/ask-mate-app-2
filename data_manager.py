@@ -25,6 +25,12 @@ def update_edited_question(edited_question, question_id):
     return updated_data
 
 
+def update_edited_answer(edited_answer, answer_id):
+    updated_data = connection.update_edited_answer(edited_answer, answer_id)
+
+    return updated_data
+
+
 def delete_question(question_id):
     return connection.delete_question(connection.QUESTION_FILE_PATH, question_id)
 
@@ -39,4 +45,9 @@ def update_question_vote_number(dictionary):
 
 def update_answer_vote_number(dictionary):
     connection.update_question_vote_number(dictionary,connection.ANSWER_FILE_PATH, connection.ANSWERS_HEADER)
+
+
+def delete_answer_by_answer_id(answer_id):
+    connection.delete_answer_by_answer_id(answer_id)
+
 

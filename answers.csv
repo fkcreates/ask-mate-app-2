@@ -1,6 +1,8 @@
 id,submission_time,vote_number,question_id,message,image
-0,1493398154,4,0,You need to use brackets: my_list = [],
+0,1554301817,4,0,You need to use brackets: my_list = [],
 1,1493088154,35,0,Look it up in the Python docs,
 2,1554198973,0,4,legujabb valasy,
 3,1554198979,0,4,meg egy uj valasz,
-4,1554280564,0,3,"helo, this is my answer",no image
+4,1554299684,,,"helo, this is my answer hello",
+5,1554299778,,,hello this is my answer123,
+6,1554300093,,,ertyuioiuytyui123,

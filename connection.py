@@ -48,6 +48,33 @@ def update_edited_question(edited_question, question_id):
 
     return data
 
+def update_edited_answer(edited_answer, answer_id):
+    data = get_data_from_file(ANSWER_FILE_PATH)
+
+    with open(ANSWER_FILE_PATH, "w") as file:
+        writer = csv.DictWriter(file, fieldnames=ANSWERS_HEADER)
+        writer.writeheader()
+
+        for answer in data:
+            if answer["id"] == answer_id:
+                writer.writerow(edited_answer)
+            else:
+                writer.writerow(answer)
+
+    return data
+
+def delete_answer_by_answer_id(answer_id):
+    data = get_data_from_file(ANSWER_FILE_PATH)
+
+    with open(ANSWER_FILE_PATH, "w") as file:
+        writer = csv.DictWriter(file, ANSWERS_HEADER)
+
+        writer.writeheader()
+
+        for answer in data:
+            if answer["id"] != answer_id:
+                writer.writerow(answer)
+
 
 def delete_question(filename, question_id):
 
