@@ -25,14 +25,13 @@ def update_edited_question(edited_question, question_id):
     return updated_data
 
 
-<<<<<<< HEAD
 def delete_question(question_id):
     return connection.delete_question(connection.QUESTION_FILE_PATH, question_id)
 
 
 def delete_answers_for_deleted_question(question_id):
     return connection.delete_answers_for_deleted_question(connection.ANSWER_FILE_PATH, question_id)
-=======
+
 def update_question_vote_number(dictionary):
     connection.update_question_vote_number(dictionary, connection.QUESTION_FILE_PATH, connection.QUESTIONS_HEADER)
->>>>>>> 32db992cf3e0710bd5d7dc9cae92c449156fe9bc
+
