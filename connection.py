@@ -47,3 +47,29 @@ def update_edited_question(edited_question, question_id):
                 writer.writerow(question)
 
     return data
+
+
+def delete_question(filename, question_id):
+
+    data = get_data_from_file(QUESTION_FILE_PATH)
+    with open(filename, "w") as file:
+        writer = csv.DictWriter(file, QUESTIONS_HEADER)
+        writer.writeheader()
+
+        for row in data:
+            if row["id"] != question_id:
+                writer.writerow(row)
+
+
+def delete_answers_for_deleted_question(filename, question_id):
+    data = get_data_from_file(ANSWER_FILE_PATH)
+
+    with open(filename, "w") as file:
+        writer = csv.DictWriter(file, ANSWERS_HEADER)
+        writer.writeheader()
+
+        for row in data:
+            if row["question_id"] != question_id:
+                writer.writerow(row)
+
+    return data
