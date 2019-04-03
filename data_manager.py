@@ -23,3 +23,7 @@ def update_edited_question(edited_question, question_id):
     updated_data = connection.update_edited_question(edited_question, question_id)
 
     return updated_data
+
+
+def update_question_vote_number(dictionary):
+    connection.update_question_vote_number(dictionary, connection.QUESTION_FILE_PATH, connection.QUESTIONS_HEADER)

@@ -47,3 +47,16 @@ def update_edited_question(edited_question, question_id):
                 writer.writerow(question)
 
     return data
+
+
+def update_question_vote_number(dictionary, filename, fieldnames):
+    data = get_data_from_file(filename)
+
+    with open(filename, "w") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for row in data:
+            if row["id"] == dictionary["id"]:
+                row = dictionary
+            writer.writerow(row)

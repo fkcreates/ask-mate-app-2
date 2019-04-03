@@ -112,6 +112,42 @@ def edit_question(question_id):
     return redirect(url_for("display_question", question_id=question_id))
 
 
+@app.route('/question/<question_id>/vote-up')
+def question_vote_up(question_id):
+    data = data_manager.get_questions()
+    voted_dict = {}
+    for dict in data:
+        if dict["id"] == question_id:
+            voted_dict = {"id": question_id,
+                          "submission_time": dict["submission_time"],
+                          "view_number": dict["view_number"],
+                          "vote_number": int(dict["vote_number"]) + 1,
+                          "title": dict["title"],
+                          "message": dict["message"],
+                          "image": dict["image"]
+                          }
+    data_manager.update_question_vote_number(voted_dict)
+    return redirect(url_for("list_question"))
+
+
+@app.route('/question/<question_id>/vote-down')
+def question_vote_down(question_id):
+    data = data_manager.get_questions()
+    voted_dict = {}
+    for dict in data:
+        if dict["id"] == question_id:
+            voted_dict = {"id": question_id,
+                          "submission_time": dict["submission_time"],
+                          "view_number": dict["view_number"],
+                          "vote_number": int(dict["vote_number"]) - 1,
+                          "title": dict["title"],
+                          "message": dict["message"],
+                          "image": dict["image"]
+                          }
+    data_manager.update_question_vote_number(voted_dict)
+    return redirect(url_for("list_question"))
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
