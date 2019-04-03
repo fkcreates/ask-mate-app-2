@@ -171,6 +171,44 @@ def question_vote_down(question_id):
     return redirect(url_for("list_question"))
 
 
+@app.route('/answer/<answer_id>/vote-down')
+def answer_vote_down(answer_id):
+    question_id = request.args.get("question_id")
+
+    data = data_manager.get_answers()
+    voted_dict = {}
+    for dict in data:
+        if dict["id"] == answer_id:
+            voted_dict = {"id": answer_id,
+                          "submission_time": dict["submission_time"],
+                          "vote_number": int(dict["vote_number"]) - 1,
+                          "question_id": question_id,
+                          "message": dict["message"],
+                          "image": dict["image"]
+                          }
+    data_manager.update_answer_vote_number(voted_dict)
+    return redirect(url_for("display_question", question_id=question_id))
+
+
+@app.route('/answer/<answer_id>/vote-up')
+def answer_vote_up(answer_id):
+    question_id = request.args.get("question_id")
+
+    data = data_manager.get_answers()
+    voted_dict = {}
+    for dict in data:
+        if dict["id"] == answer_id:
+            voted_dict = {"id": answer_id,
+                          "submission_time": dict["submission_time"],
+                          "vote_number": int(dict["vote_number"]) + 1,
+                          "question_id": dict["question_id"],
+                          "message": dict["message"],
+                          "image": dict["image"]
+                          }
+    data_manager.update_answer_vote_number(voted_dict)
+    return redirect(url_for("display_question", question_id=question_id))
+
+
 @app.route('/answer/<answer_id>/edit', methods=["GET"])
 def route_edit_answer(answer_id):
     answers = data_manager.get_answers()
