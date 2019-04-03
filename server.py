@@ -100,7 +100,6 @@ def post_answer(question_id):
 
 
 @app.route('/answer/<answer_id>/delete', methods = ["POST"])
-def delete_answer(question_id, answer_id):
     return redirect(url_for("display_question", question_id=question_id))
 
 
