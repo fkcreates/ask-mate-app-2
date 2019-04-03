@@ -46,6 +46,7 @@
             <th>Submission time</th>
             <th>Vote number</th>
             <th>Message</th>
+            <th>Vote</th>
         </tr>
     </thead>
     <tbody>
@@ -55,6 +56,10 @@
             <td>{{ answer["submission_time"] }}</td>
             <td>{{ answer["vote_number"] }}</td>
             <td>{{ answer["message"] }}</td>
+            <td>
+                <a href="{{ url_for("answer_vote_up", answer_id=answer["id"], question_id=answer["question_id"]) }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
+                <a href="{{ url_for("answer_vote_down", answer_id=answer["id"], question_id=answer["question_id"]) }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+            </td>
         </tr>
         {% endif %}
     {% endfor %}
