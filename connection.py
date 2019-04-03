@@ -74,6 +74,11 @@ def delete_answers_for_deleted_question(filename, question_id):
 
     return data
 
+
+def delete_answer(question_id, answer_id):
+    return
+
+
 def update_question_vote_number(dictionary, filename, fieldnames):
     data = get_data_from_file(filename)
 

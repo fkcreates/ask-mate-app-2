@@ -99,6 +99,11 @@ def post_answer(question_id):
     return redirect(url_for("display_question", question_id=question_id))
 
 
+@app.route('/answer/<answer_id>/delete', methods = ["POST"])
+def delete_answer(question_id, answer_id):
+    return redirect(url_for("display_question", question_id=question_id))
+
+
 @app.route('/question/<question_id>/edit', methods=["GET"])
 def route_edit_question(question_id):
     questions = data_manager.get_questions()
