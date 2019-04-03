@@ -117,14 +117,19 @@ def route_edit_question(question_id):
 
 @app.route('/question/<question_id>/edit', methods=["POST"])
 def edit_question(question_id):
-    updated_question = {"id" : question_id,
-                    "submission_time" : util.generate_timestamp(),
-                    "view_number" : 0,
-                    "vote_number" : 0,
-                    "title" : request.form.get("title"),
-                    "message": request.form.get("message"),
-                    "image" : None,
-                    }
+    questions = data_manager.get_questions()
+
+    for question in questions:
+        if question["id"] == question_id:
+
+            updated_question = {"id" : question_id,
+                            "submission_time" : util.generate_timestamp(),
+                            "view_number" : question["view_number"],
+                            "vote_number" : question["vote_number"],
+                            "title" : request.form.get("title"),
+                            "message": request.form.get("message"),
+                            "image" : None,
+                            }
 
     data_manager.update_edited_question(updated_question, question_id)
 
@@ -165,6 +170,58 @@ def question_vote_down(question_id):
                           }
     data_manager.update_question_vote_number(voted_dict)
     return redirect(url_for("list_question"))
+
+
+@app.route('/answer/<answer_id>/edit', methods=["GET"])
+def route_edit_answer(answer_id):
+    answers = data_manager.get_answers()
+    question_id = request.args.get("question_id")
+
+    return render_template("edit_answer.html",
+                           title="Edit answer",
+                           answers=answers,
+                           answer_id=answer_id,
+                           question_id=question_id)
+
+
+@app.route('/answer/<answer_id>/edit', methods=["POST"])
+def edit_answer(answer_id):
+    question_id = request.args.get("question_id")
+    answers = data_manager.get_answers()
+
+    for answer in answers:
+        if answer["id"] == answer_id:
+
+            edited_answer = { "id" : answer_id,
+                              "submission_time" : util.generate_timestamp(),
+                              "vote_number" : answer["vote_number"],
+                              "question_id" : question_id,
+                              "message" : request.form.get("message"),
+                              "image" : None
+            }
+
+    data_manager.update_edited_answer(edited_answer, answer_id)
+
+    return redirect(url_for("display_question", question_id=question_id))
+
+
+@app.route('/answer/<answer_id>/are-you-sure', methods=["GET"])
+def confirm_delete_answer(answer_id):
+    question_id = request.args.get("question_id")
+
+    return render_template("confirm_delete_answer.html",
+                           answer_id=answer_id,
+                           question_id=question_id,
+                           title="Are you sure you want to delete this answer?")
+
+
+@app.route('/answer/<answer_id>/delete', methods=["POST"])
+def delete_answer(answer_id):
+    question_id = request.args.get("question_id")
+
+    data_manager.delete_answer_by_answer_id(answer_id)
+
+    return redirect(url_for("display_question", question_id=question_id))
 
 
 if __name__ == "__main__":

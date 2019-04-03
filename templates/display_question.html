@@ -32,13 +32,17 @@
     {% endfor %}
     </tbody>
 </table>
-    <br>
-    <p>
-        <a href="{{ url_for("edit_question", question_id=question_id) }}">Edit question</a>
-    </p>
-    <p>
-        <a href="{{ url_for("post_answer", question_id=question_id) }}">Add new answer</a>
-    </p>
+<br>
+<p>
+    <a href="{{ url_for("edit_question", question_id=question_id) }}">Edit question</a>
+</p>
+<p>
+    <a href="{{ url_for('confirm_delete_question', question_id=question_id) }}" method='POST'>Delete question</a>
+</p>
+<br>
+<p>
+    <a href="{{ url_for("post_answer", question_id=question_id) }}">Add new answer</a>
+</p>
     <h3>Answers</h3>
 <table>
     <thead>
@@ -46,6 +50,8 @@
             <th>Submission time</th>
             <th>Vote number</th>
             <th>Message</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -55,14 +61,13 @@
             <td>{{ answer["submission_time"] }}</td>
             <td>{{ answer["vote_number"] }}</td>
             <td>{{ answer["message"] }}</td>
+            <td><a href="{{ url_for("edit_answer", answer_id=answer["id"], question_id=answer["question_id"]) }}">Edit this answer</a></td>
+            <td><a href="{{ url_for("confirm_delete_answer", answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete this answer</a></td>
         </tr>
         {% endif %}
     {% endfor %}
     </tbody>
 </table>
-<p>
-    <a href="{{ url_for('confirm_delete_question', question_id=question_id) }}" method='POST'>Delete question</a>
-</p>
 <p>
     <a href="{{ url_for("list_question") }}">Go back to main page</a>
 </p>
