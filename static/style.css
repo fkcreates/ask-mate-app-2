@@ -1,0 +1,76 @@
+h1 {
+    color: #11557C;
+    font-family: Arial;
+    font-size: 50px;
+    letter-spacing: 5px;
+}
+
+
+h3 {
+    color: #11557C;
+    font-family: Arial;
+    font-size: 30px;
+    letter-spacing: 5px;
+
+}
+
+
+th {
+    background-color: #11557C;
+    color: white;
+    height: 50px;
+    text-align: center;
+    font-family: Arial;
+    font-size: 18px;
+    padding: 30px;
+    letter-spacing: 5px;
+}
+
+
+td {
+    background-color: #cccccc;
+    color: #485F6E;
+    height: 50px;
+    text-align: center;
+    font-family: Arial;
+    font-style: normal;
+    font-size: 16px;
+    padding: 20px;
+
+}
+
+
+a {
+    color: #485F6E;
+}
+
+
+p {
+    color: #11557C;
+    font-family: Arial;
+    font-style: normal;
+    font-size: 18px;
+
+}
+
+
+button {
+    padding: 20px;
+    font-family: Arial;
+    font-style: normal;
+    font-size: 18px;
+    color: #485F6E;
+    background-color: #A5D6D9;
+}
+
+
+textarea {
+    color: #485F6E;
+    font-size: 15px;
+}
+
+
+input {
+    color: #485F6E;
+    font-size: 15px;
+}

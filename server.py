@@ -20,6 +20,8 @@ def list_question():
 @app.route('/question/<question_id>')
 def display_question(question_id):
     questions = data_manager.get_questions()
+    converted_questions = util.convert_timestamp_to_date(questions)
+
 
     answers = data_manager.get_answers()
     sorted_answers = util.sort_data_by_time(answers)
@@ -29,7 +31,7 @@ def display_question(question_id):
     return render_template("display_question.html",
                            question_id=question_id,
                            answers=converted_answers,
-                           questions=questions,
+                           questions=converted_questions,
                            title="Display question")
 
 
