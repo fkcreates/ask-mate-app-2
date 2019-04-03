@@ -9,7 +9,6 @@ app = Flask(__name__)
 @app.route('/list')
 @app.route('/')
 def list_question():
-
     questions = data_manager.get_questions()
     sorted_questions = util.sort_data_by_time(questions)
     converted_questions = util.convert_timestamp_to_date(sorted_questions)
@@ -26,7 +25,6 @@ def display_question(question_id):
     answers = data_manager.get_answers()
     sorted_answers = util.sort_data_by_time(answers)
     converted_answers = util.convert_timestamp_to_date(sorted_answers)
-
 
     return render_template("display_question.html",
                            question_id=question_id,
@@ -54,9 +52,7 @@ def add_question():
                     "image" : "no image",
                     }
 
-
     data_manager.write_question_to_file(new_question)
-
 
     return redirect(url_for("list_question"))
 
@@ -71,7 +67,6 @@ def confirm_delete_question(question_id):
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
 def delete_question(question_id):
-
     data_manager.delete_question(question_id)
     data_manager.delete_answers_for_deleted_question(question_id)
 
@@ -139,6 +134,7 @@ def edit_question(question_id):
 @app.route('/question/<question_id>/vote-up')
 def question_vote_up(question_id):
     data = data_manager.get_questions()
+
     voted_dict = {}
     for dict in data:
         if dict["id"] == question_id:
@@ -151,12 +147,14 @@ def question_vote_up(question_id):
                           "image": dict["image"]
                           }
     data_manager.update_question_vote_number(voted_dict)
+
     return redirect(url_for("list_question"))
 
 
 @app.route('/question/<question_id>/vote-down')
 def question_vote_down(question_id):
     data = data_manager.get_questions()
+
     voted_dict = {}
     for dict in data:
         if dict["id"] == question_id:
@@ -169,6 +167,7 @@ def question_vote_down(question_id):
                           "image": dict["image"]
                           }
     data_manager.update_question_vote_number(voted_dict)
+
     return redirect(url_for("list_question"))
 
 
