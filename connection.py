@@ -33,7 +33,7 @@ def write_data_to_file(dictionary, filename, fieldnames):
         writer.writerow(dictionary)
 
 
-def update_question(edited_question, question_id):
+def update_edited_question(edited_question, question_id):
     data = get_data_from_file(QUESTION_FILE_PATH)
 
     with open(QUESTION_FILE_PATH, "w") as file:

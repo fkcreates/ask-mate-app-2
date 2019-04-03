@@ -19,7 +19,7 @@ def write_question_to_file(dictionary):
     data = connection.write_data_to_file(dictionary, connection.QUESTION_FILE_PATH, connection.QUESTIONS_HEADER)
 
 
-def update_question(edited_question, question_id):
-    updated_data = connection.update_question(edited_question, question_id)
+def update_edited_question(edited_question, question_id):
+    updated_data = connection.update_edited_question(edited_question, question_id)
 
     return updated_data

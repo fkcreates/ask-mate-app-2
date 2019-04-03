@@ -92,13 +92,12 @@ def route_edit_question(question_id):
 
     return render_template("edit_question.html",
                            title = "Edit question",
-                           question = question,
+                           question = question_to_edit,
                            question_id=question_id)
 
 
 @app.route('/question/<question_id>/edit', methods=["POST"])
 def edit_question(question_id):
-
     updated_question = {"id" : question_id,
                     "submission_time" : util.generate_timestamp(),
                     "view_number" : 0,
@@ -108,10 +107,7 @@ def edit_question(question_id):
                     "image" : None,
                     }
 
-
-
-    data_manager.update_question(updated_question, question_id)
-
+    data_manager.update_edited_question(updated_question, question_id)
 
     return redirect(url_for("display_question", question_id=question_id))
 
