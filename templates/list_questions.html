@@ -14,6 +14,7 @@
             <th>View number</th>
             <th>Vote number</th>
             <th>Title</th>
+            <th>Vote</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +24,10 @@
             <td>{{ row["view_number"] }}</td>
             <td>{{ row["vote_number"] }}</td>
             <td><a href="{{ url_for("display_question", question_id=row["id"])}}">{{ row["title"] }}</a></td>
+            <td>
+                <a href="{{ url_for("question_vote_up", question_id=row["id"]) }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
+                <a href="{{ url_for("question_vote_down", question_id=row["id"]) }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
