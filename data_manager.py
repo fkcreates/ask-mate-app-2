@@ -20,6 +20,18 @@ def display_question(cursor, question_id):
     question = cursor.fetchall()
     return question
 
+
+@connection.connection_handler
+def list_answers_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    answers = cursor.fetchall()
+    return answers
+
+
 @connection.connection_handler
 def route_edit_question(cursor, question_id):
     cursor.execute("""
@@ -72,6 +84,16 @@ def add_new_data_to_table(cursor, dict, type):
                         'image': dict['image']})
 
 
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                DELETE FROM comment
+                WHERE answer_id = %(answer_id)s;
+                DELETE FROM answer
+                WHERE id = %(answer_id)s;
+                """,
+                {'answer_id': answer_id})
+
 
 """
 def get_answers():
@@ -101,14 +123,30 @@ def update_edited_question(edited_question, question_id):
 def update_edited_answer(edited_answer, answer_id):
     updated_data = connection.update_edited_answer(edited_answer, answer_id)
 
-    return updated_data
+    return updated_data"""
 
 
-def delete_question(question_id):
-    return connection.delete_question(connection.QUESTION_FILE_PATH, question_id)
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute("""
+                   DELETE FROM comment
+                   WHERE question_id = %(question_id)s;
+                   
+                   DELETE FROM answer
+                   WHERE question_id = %(question_id)s;
+                   
+                   DELETE FROM question_tag
+                   WHERE question_id = %(question_id)s;
+                   
+                   DELETE FROM question
+                   WHERE id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
+    question_id = question_id
+    return question_id
 
 
-def delete_answers_for_deleted_question(question_id):
+"""def delete_answers_for_deleted_question(question_id):
     return connection.delete_answers_for_deleted_question(connection.ANSWER_FILE_PATH, question_id)
 
 

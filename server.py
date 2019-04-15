@@ -16,9 +16,11 @@ def list_question():
 @app.route('/question/<int:question_id>')
 def display_question(question_id):
     question = data_manager.display_question(question_id)
+    answers = data_manager.list_answers_for_question(question_id)
     return render_template("display_question.html",
                            question_id=question_id,
                            question=question,
+                           answers=answers,
                            title="Display question")
 
 
@@ -54,19 +56,10 @@ def confirm_delete_question(question_id):
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
 def delete_question(question_id):
-    """
-    ide kell egy DELETE query connectionbol
-    vigyen vissza a fooldal htmlre
-
-    regi kod:
     data_manager.delete_question(question_id)
+    # data_manager.delete_answers_for_deleted_question(question_id)
 
-
-    data_manager.delete_answers_for_deleted_question(question_id)
-
-    return redirect(url_for("list_question"))"""
-
-    pass
+    return redirect(url_for("list_question"))
 
 
 @app.route('/question/<question_id>/new-answer', methods=["GET"])
@@ -127,7 +120,8 @@ def edit_question(question_id):
 
     data_manager.edit_question(question_id, edited_title, edited_message)
 
-    return redirect(url_for("display_question", question_id=question_id))
+    return redirect(url_for("display_question",
+                            question_id=question_id))
 
     """
     itt tud a user editalni, azaz egy UPDATE query kell sqlbol,
@@ -307,8 +301,14 @@ def edit_answer(answer_id):
     pass
 
 
-@app.route('/answer/<answer_id>/are-you-sure', methods=["GET"])
+@app.route('/answer/<int:answer_id>/are-you-sure', methods=["GET"])
 def confirm_delete_answer(answer_id):
+    question_id = request.args.get("question_id")
+    return render_template("confirm_delete_answer.html",
+                           answer_id=answer_id,
+                           question_id=question_id,
+                           title="Are you sure you want to delete this answer?")
+
     """
     UGYANAZ, MINT A DELETE QUESTIONNEL, CSAK ANSWER
 
@@ -320,11 +320,17 @@ def confirm_delete_answer(answer_id):
                            question_id=question_id,
                            title="Are you sure you want to delete this answer?")"""
 
-    pass
 
-
-@app.route('/answer/<answer_id>/delete', methods=["POST"])
+@app.route('/answer/<int:answer_id>/delete', methods=["GET", "POST"])
 def delete_answer(answer_id):
+
+    question_id = request.args.get("question_id")
+
+    data_manager.delete_answer(answer_id)
+
+    return redirect(url_for("display_question",
+                            question_id=question_id))
+
     """
     UGYANAZ, MINT A DELETE QUESTIONNEL, CSAK ANSWER
 
@@ -335,8 +341,6 @@ def delete_answer(answer_id):
     data_manager.delete_answer_by_answer_id(answer_id)
 
     return redirect(url_for("display_question", question_id=question_id))"""
-
-    pass
 
 
 if __name__ == "__main__":
