@@ -31,6 +31,7 @@ def route_edit_question(cursor, question_id):
     question_to_edit = cursor.fetchall()
     return question_to_edit[0]
 
+
 @connection.connection_handler
 def edit_question(cursor, question_id, edited_title, edited_message):
     cursor.execute("""
@@ -44,15 +45,32 @@ def edit_question(cursor, question_id, edited_title, edited_message):
 
 
 @connection.connection_handler
-def add_new_question(cursor, dict):
+def add_new_data_to_table(cursor, dict, type):
     from datetime import datetime
     dt = datetime.now().strftime("%Y-%m-%d %H:%M")
-    cursor.execute("""
-                    INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
-                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
-                     """,
-                   {'submission_time': dt, 'view_number': dict['view_number'], 'vote_number':dict['vote_number'],
-                    'title': dict['title'], 'message': dict['message'], 'image': dict['image']})
+
+    if type == "question":
+        cursor.execute("""
+                        INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
+                        VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+                         """,
+                       {'submission_time': dt,
+                        'view_number': dict['view_number'],
+                        'vote_number':dict['vote_number'],
+                        'title': dict['title'],
+                        'message': dict['message'],
+                        'image': dict['image']})
+    elif type == "answer":
+        cursor.execute("""
+                        INSERT INTO answer(submission_time, vote_number, question_id, message, image)
+                        VALUES(%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s);
+                        """,
+                       {'submission_time': dt,
+                        'vote_number': dict['vote_number'],
+                        'question_id': dict['question_id'],
+                        'message': dict['message'],
+                        'image': dict['image']})
+
 
 
 """

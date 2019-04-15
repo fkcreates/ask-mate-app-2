@@ -22,10 +22,8 @@ def display_question(question_id):
                            title="Display question")
 
 
-
-@app.route('/add-question', methods = ["GET"])
+@app.route('/add-question', methods=["GET"])
 def route_question():
-
     return render_template("add_question.html",
                            title="Add question",
                            )
@@ -42,8 +40,7 @@ def add_question():
                     "image": None,
                     }
 
-    data_manager.add_new_question(new_question)
-
+    data_manager.add_new_data_to_table(new_question, 'question')
     return redirect(url_for("list_question"))
 
 
@@ -72,7 +69,7 @@ def delete_question(question_id):
     pass
 
 
-@app.route('/question/<question_id>/new-answer', methods = ["GET"])
+@app.route('/question/<question_id>/new-answer', methods=["GET"])
 def route_new_answer(question_id):
 
     return render_template("new_answer.html",
@@ -80,27 +77,18 @@ def route_new_answer(question_id):
                            title="New answer")
 
 
-@app.route('/question/<question_id>/new-answer', methods = ["POST"])
+@app.route('/question/<question_id>/new-answer', methods=["POST"])
 def post_answer(question_id):
-    """ ide jon INSERT INTO query sqlbol
-    vigyen vissza az adott kerdeshez
 
-    regi kod:
-    new_answer = {"id": util.id_generator("answer"),
-
-
-                  "submission_time" : util.generate_timestamp(),
-                  "vote_number" : 0,
-                  "question_id" : question_id,
-                  "message" : request.form.get("message"),
-                  "image" : "no image"
+    new_answer = {
+                  "vote_number": 0,
+                  "question_id": question_id,
+                  "message": request.form.get("message"),
+                  "image": None,
                   }
 
-    data_manager.write_answer_to_file(new_answer)
-
-    return redirect(url_for("display_question", question_id=question_id))"""
-
-    pass
+    data_manager.add_new_data_to_table(new_answer, 'answer')
+    return redirect(url_for("display_question", question_id=question_id))
 
 
 @app.route('/question/<int:question_id>/edit', methods=["GET"])
