@@ -110,8 +110,16 @@ def post_answer(question_id):
     pass
 
 
-@app.route('/question/<question_id>/edit', methods=["GET"])
+@app.route('/question/<int:question_id>/edit', methods=["GET"])
 def route_edit_question(question_id):
+
+    question_to_edit = data_manager.route_edit_question(question_id)
+
+    return render_template("edit_question.html",
+                           title="Edit question",
+                           question=question_to_edit,
+                           question_id=question_id)
+
     """
     ide kell egy beolvaso query sqlbol, adott questionhoz
     kap egy question id-t,
@@ -129,11 +137,16 @@ def route_edit_question(question_id):
                            question = question_to_edit,
                            question_id=question_id)"""
 
-    pass
-
 
 @app.route('/question/<question_id>/edit', methods=["POST"])
 def edit_question(question_id):
+
+    edited_title = request.form["title"]
+    edited_message = request.form["message"]
+
+    data_manager.edit_question(question_id, edited_title, edited_message)
+
+    return redirect(url_for("display_question", question_id=question_id))
 
     """
     itt tud a user editalni, azaz egy UPDATE query kell sqlbol,
@@ -157,7 +170,7 @@ def edit_question(question_id):
     data_manager.update_edited_question(updated_question, question_id)
 
     return redirect(url_for("display_question", question_id=question_id))"""
-    pass
+
 
 
 @app.route('/question/<question_id>/vote-up')

@@ -20,6 +20,28 @@ def display_question(cursor, question_id):
     question = cursor.fetchall()
     return question
 
+@connection.connection_handler
+def route_edit_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+
+    question_to_edit = cursor.fetchall()
+    return question_to_edit[0]
+
+@connection.connection_handler
+def edit_question(cursor, question_id, edited_title, edited_message):
+    cursor.execute("""
+                    UPDATE question
+                    SET title = %(edited_title)s, message = %(edited_message)s
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id,
+                    'edited_title': edited_title,
+                    'edited_message': edited_message})
+
 
 """
 def get_answers():
