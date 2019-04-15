@@ -20,6 +20,40 @@ def display_question(cursor, question_id):
     question = cursor.fetchall()
     return question
 
+@connection.connection_handler
+def route_edit_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+
+    question_to_edit = cursor.fetchall()
+    return question_to_edit[0]
+
+@connection.connection_handler
+def edit_question(cursor, question_id, edited_title, edited_message):
+    cursor.execute("""
+                    UPDATE question
+                    SET title = %(edited_title)s, message = %(edited_message)s
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id,
+                    'edited_title': edited_title,
+                    'edited_message': edited_message})
+
+
+@connection.connection_handler
+def add_new_question(cursor, dict):
+    from datetime import datetime
+    dt = datetime.now().strftime("%Y-%m-%d %H:%M")
+    cursor.execute("""
+                    INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
+                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+                     """,
+                   {'submission_time': dt, 'view_number': dict['view_number'], 'vote_number':dict['vote_number'],
+                    'title': dict['title'], 'message': dict['message'], 'image': dict['image']})
+
 
 """
 def get_answers():
