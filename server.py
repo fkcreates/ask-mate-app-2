@@ -59,19 +59,10 @@ def confirm_delete_question(question_id):
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
 def delete_question(question_id):
-    """
-    ide kell egy DELETE query connectionbol
-    vigyen vissza a fooldal htmlre
-
-    regi kod:
     data_manager.delete_question(question_id)
+    # data_manager.delete_answers_for_deleted_question(question_id)
 
-
-    data_manager.delete_answers_for_deleted_question(question_id)
-
-    return redirect(url_for("list_question"))"""
-
-    pass
+    return redirect(url_for("list_question"))
 
 
 @app.route('/question/<question_id>/new-answer', methods = ["GET"])
