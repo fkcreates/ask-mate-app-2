@@ -20,6 +20,18 @@ def display_question(cursor, question_id):
     question = cursor.fetchall()
     return question
 
+
+@connection.connection_handler
+def list_answers_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE question_id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    answers = cursor.fetchall()
+    return answers
+
+
 @connection.connection_handler
 def route_edit_question(cursor, question_id):
     cursor.execute("""
@@ -51,8 +63,23 @@ def add_new_question(cursor, dict):
                     INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
                     VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
                      """,
-                   {'submission_time': dt, 'view_number': dict['view_number'], 'vote_number':dict['vote_number'],
-                    'title': dict['title'], 'message': dict['message'], 'image': dict['image']})
+                   {'submission_time': dt,
+                    'view_number': dict['view_number'],
+                    'vote_number':dict['vote_number'],
+                    'title': dict['title'],
+                    'message': dict['message'],
+                    'image': dict['image']})
+
+
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                DELETE FROM comment
+                WHERE answer_id = %(answer_id)s;
+                DELETE FROM answer
+                WHERE id = %(answer_id)s;
+                """,
+                {'answer_id': answer_id})
 
 
 """
