@@ -1,120 +1,51 @@
-import csv
-
-ANSWER_FILE_PATH = "answers.csv"
-QUESTION_FILE_PATH = "questions.csv"
-
-ANSWERS_HEADER = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
-QUESTIONS_HEADER = [ "id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+# Creates a decorator to handle the database connection/cursor opening/closing.
+# Creates the cursor with RealDictCursor, thus it returns real dictionaries, where the column names are the keys.
+import os
+import psycopg2
+import psycopg2.extras
 
 
-def get_data_from_file(filename):
-    data = []
+def get_connection_string():
+    # setup connection string
+    # to do this, please define these environment variables first
+    user_name = os.environ.get('PSQL_USER_NAME')
+    password = os.environ.get('PSQL_PASSWORD')
+    host = os.environ.get('PSQL_HOST')
+    database_name = os.environ.get('PSQL_DB_NAME')
 
-    with open(filename) as file:
+    env_variables_defined = user_name and password and host and database_name
 
-        reader = csv.DictReader(file)
-
-        for row in reader:
-            data.append(dict(row))
-
-    return data
-
-
-def write_data_to_file(dictionary, filename, fieldnames):
-    data = get_data_from_file(filename)
-
-    with open(filename, "w") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-
-        for row in data:
-            writer.writerow(row)
-
-        writer.writerow(dictionary)
+    if env_variables_defined:
+        # this string describes all info for psycopg2 to connect to the database
+        return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
+            user_name=user_name,
+            password=password,
+            host=host,
+            database_name=database_name
+        )
+    else:
+        raise KeyError('Some necessary environment variable(s) are not defined')
 
 
-def update_edited_question(edited_question, question_id):
-    data = get_data_from_file(QUESTION_FILE_PATH)
-
-    with open(QUESTION_FILE_PATH, "w") as file:
-        writer = csv.DictWriter(file, fieldnames=QUESTIONS_HEADER)
-        writer.writeheader()
-
-        for question in data:
-            if question["id"] == question_id:
-                writer.writerow(edited_question)
-            else:
-                writer.writerow(question)
-
-    return data
-
-def update_edited_answer(edited_answer, answer_id):
-    data = get_data_from_file(ANSWER_FILE_PATH)
-
-    with open(ANSWER_FILE_PATH, "w") as file:
-        writer = csv.DictWriter(file, fieldnames=ANSWERS_HEADER)
-        writer.writeheader()
-
-        for answer in data:
-            if answer["id"] == answer_id:
-                writer.writerow(edited_answer)
-            else:
-                writer.writerow(answer)
-
-    return data
-
-def delete_answer_by_answer_id(answer_id):
-    data = get_data_from_file(ANSWER_FILE_PATH)
-
-    with open(ANSWER_FILE_PATH, "w") as file:
-        writer = csv.DictWriter(file, ANSWERS_HEADER)
-
-        writer.writeheader()
-
-        for answer in data:
-            if answer["id"] != answer_id:
-                writer.writerow(answer)
+def open_database():
+    try:
+        connection_string = get_connection_string()
+        connection = psycopg2.connect(connection_string)
+        connection.autocommit = True
+    except psycopg2.DatabaseError as exception:
+        print('Database connection problem')
+        raise exception
+    return connection
 
 
-def delete_question(filename, question_id):
+def connection_handler(function):
+    def wrapper(*args, **kwargs):
+        connection = open_database()
+        # we set the cursor_factory parameter to return with a RealDictCursor cursor (cursor which provide dictionaries)
+        dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        ret_value = function(dict_cur, *args, **kwargs)
+        dict_cur.close()
+        connection.close()
+        return ret_value
 
-    data = get_data_from_file(QUESTION_FILE_PATH)
-    with open(filename, "w") as file:
-        writer = csv.DictWriter(file, QUESTIONS_HEADER)
-        writer.writeheader()
-
-        for row in data:
-            if row["id"] != question_id:
-                writer.writerow(row)
-
-
-def delete_answers_for_deleted_question(filename, question_id):
-    data = get_data_from_file(ANSWER_FILE_PATH)
-
-    with open(filename, "w") as file:
-        writer = csv.DictWriter(file, ANSWERS_HEADER)
-        writer.writeheader()
-
-        for row in data:
-            if row["question_id"] != question_id:
-                writer.writerow(row)
-
-    return data
-
-
-def delete_answer(question_id, answer_id):
-    return
-
-
-def update_question_vote_number(dictionary, filename, fieldnames):
-    data = get_data_from_file(filename)
-
-    with open(filename, "w") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-
-        for row in data:
-            if row["id"] == dictionary["id"]:
-                row = dictionary
-            writer.writerow(row)
-
+    return wrapper

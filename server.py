@@ -6,32 +6,26 @@ from flask import render_template, Flask, url_for, request, redirect
 app = Flask(__name__)
 
 
-@app.route('/list')
 @app.route('/')
+@app.route('/list')
 def list_question():
-    questions = data_manager.get_questions()
-    sorted_questions = util.sort_data_by_time(questions)
-    converted_questions = util.convert_timestamp_to_date(sorted_questions)
-
-    return render_template("list_questions.html", data=converted_questions, title="List questions")
+    questions = data_manager.list_questions()
+    print(questions)
+    return render_template("list_questions.html", data=questions, title="List questions")
 
 
-@app.route('/question/<question_id>')
+@app.route('/question/<int:question_id>')
 def display_question(question_id):
-    questions = data_manager.get_questions()
-    converted_questions = util.convert_timestamp_to_date(questions)
-
-
-    answers = data_manager.get_answers()
-    sorted_answers = util.sort_data_by_time(answers)
-    converted_answers = util.convert_timestamp_to_date(sorted_answers)
-
+    print(question_id)
+    question = data_manager.display_question(question_id)
+    print(question)
     return render_template("display_question.html",
                            question_id=question_id,
-                           answers=converted_answers,
-                           questions=converted_questions,
+                           question=question,
                            title="Display question")
 
+
+"""
 
 @app.route('/add-question', methods = ["GET"])
 def route_question():
@@ -259,7 +253,7 @@ def delete_answer(answer_id):
     data_manager.delete_answer_by_answer_id(answer_id)
 
     return redirect(url_for("display_question", question_id=question_id))
-
+"""
 
 if __name__ == "__main__":
     app.run(

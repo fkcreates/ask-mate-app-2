@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for row in questions %}
+    {% for row in question %}
         {% if row["id"] == question_id %}
         <tr>
             <td>{{ row["submission_time"] }}</td>
@@ -32,51 +32,6 @@
     {% endfor %}
     </tbody>
 </table>
-<br>
-<p>
-    <a href="{{ url_for("edit_question", question_id=question_id) }}">Edit question</a>
-</p>
-<p>
-    <a href="{{ url_for('confirm_delete_question', question_id=question_id) }}" method='POST'>Delete question</a>
-</p>
-<br>
-<p>
-    <a href="{{ url_for("post_answer", question_id=question_id) }}">Add new answer</a>
-</p>
-    <h3>Answers</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Submission<br>time</th>
-            <th>Vote<br>number</th>
-            <th>Message</th>
-            <th>Vote</th>
-            <th>Edit</th>
-            <th>Delete</th>
-
-        </tr>
-    </thead>
-    <tbody>
-    {% for answer in answers %}
-        {% if answer["question_id"] == question_id %}
-        <tr>
-            <td>{{ answer["submission_time"] }}</td>
-            <td>{{ answer["vote_number"] }}</td>
-            <td>{{ answer["message"] }}</td>
-            <td>
-                <a href="{{ url_for("answer_vote_up", answer_id=answer["id"], question_id=answer["question_id"]) }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
-                <a href="{{ url_for("answer_vote_down", answer_id=answer["id"], question_id=answer["question_id"]) }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
-            </td>
-            <td><a href="{{ url_for("edit_answer", answer_id=answer["id"], question_id=answer["question_id"]) }}">Edit this answer</a></td>
-            <td><a href="{{ url_for("confirm_delete_answer", answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete this answer</a></td>
-        </tr>
-        {% endif %}
-    {% endfor %}
-    </tbody>
-</table>
-<p>
-    <a href="{{ url_for("list_question") }}">Go back to main page</a>
-</p>
-
+    <br><a href="{{ url_for('list_question') }}">Back to home</a>
 
 {% endblock %}

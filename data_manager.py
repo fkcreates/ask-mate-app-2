@@ -1,6 +1,27 @@
 import connection
 
 
+@connection.connection_handler
+def list_questions(cursor):
+    cursor.execute("""
+                    SELECT * FROM question;
+                    """)
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def display_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+    question = cursor.fetchall()
+    return question
+
+
+"""
 def get_answers():
     data = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
     return data
@@ -48,6 +69,6 @@ def update_answer_vote_number(dictionary):
 
 
 def delete_answer_by_answer_id(answer_id):
-    connection.delete_answer_by_answer_id(answer_id)
+    connection.delete_answer_by_answer_id(answer_id)"""
 
 
