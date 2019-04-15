@@ -31,27 +31,20 @@ def route_question():
                            )
 
 
-@app.route('/add_question', methods = ["POST"])
+@app.route('/add_question', methods=["POST"])
 def add_question():
-    """
-    ide jon a data managerben megirt insret into query,
-    visszavisz a fooldalra, miutan atvette az adatot
 
-    regi kod:
-    new_question = {"id" : util.id_generator("question"),
-                    "submission_time" : util.generate_timestamp(),
-                    "view_number" : 0,
-                    "vote_number" : 0,
-                    "title" : request.form.get("title"),
+    new_question = {
+                    "view_number": 0,
+                    "vote_number": 0,
+                    "title": request.form.get("title"),
                     "message": request.form.get("message"),
-                    "image" : "no image",
+                    "image": None,
                     }
 
-    data_manager.write_question_to_file(new_question)
+    data_manager.add_new_question(new_question)
 
-    return redirect(url_for("list_question"))"""
-
-    pass
+    return redirect(url_for("list_question"))
 
 
 @app.route('/question/<question_id>/are-you-sure', methods=["GET"])
