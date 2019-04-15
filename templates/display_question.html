@@ -42,8 +42,6 @@
             <th>Submission<br>time</th>
             <th>Vote<br>number</th>
             <th>Message</th>
-            <th>ID</th>
-            <th>question id</th>
             <th>Edit answer</th>
             <th>Delete answer</th>
         </tr>
@@ -54,8 +52,6 @@
             <td>{{ answer["submission_time"] }}</td>
             <td>{{ answer["vote_number"] }}</td>
             <td>{{ answer["message"] }}</td>
-            <td>{{ answer["id"] }}</td>
-            <td>{{ answer["question_id"] }}</td>
             <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"]) }}">Edit answer</a></td>
             <td><a href="{{ url_for('confirm_delete_answer', answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete answer</a></td>
         </tr>
