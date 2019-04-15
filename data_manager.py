@@ -49,14 +49,30 @@ def update_edited_question(edited_question, question_id):
 def update_edited_answer(edited_answer, answer_id):
     updated_data = connection.update_edited_answer(edited_answer, answer_id)
 
-    return updated_data
+    return updated_data"""
 
 
-def delete_question(question_id):
-    return connection.delete_question(connection.QUESTION_FILE_PATH, question_id)
+@connection.connection_handler
+def delete_question(cursor, question_id):
+    cursor.execute("""
+                   DELETE FROM comment
+                   WHERE question_id = %(question_id)s;
+                   
+                   DELETE FROM answer
+                   WHERE question_id = %(question_id)s;
+                   
+                   DELETE FROM question_tag
+                   WHERE question_id = %(question_id)s;
+                   
+                   DELETE FROM question
+                   WHERE id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
+    question_id = question_id
+    return question_id
 
 
-def delete_answers_for_deleted_question(question_id):
+"""def delete_answers_for_deleted_question(question_id):
     return connection.delete_answers_for_deleted_question(connection.ANSWER_FILE_PATH, question_id)
 
 
