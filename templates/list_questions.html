@@ -26,8 +26,8 @@
             <td>{{ row["vote_number"] }}</td>
             <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
             <td>
-                <img src="/static/like.png" width="30" height="30" alt="Like">
-                <img src="/static/dislike.png" width="30" height="30" alt="Dislike">
+                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='up') }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
+                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='down') }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
             </td>
         </tr>
     {% endfor %}

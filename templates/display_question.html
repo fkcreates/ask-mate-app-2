@@ -44,6 +44,7 @@
             <th>Message</th>
             <th>Edit answer</th>
             <th>Delete answer</th>
+            <th>Vote</th>
         </tr>
     </thead>
     <tbody>
@@ -52,8 +53,12 @@
             <td>{{ answer["submission_time"] }}</td>
             <td>{{ answer["vote_number"] }}</td>
             <td>{{ answer["message"] }}</td>
-            <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"]) }}">Edit answer</a></td>
+            <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"], question_id=question_id) }}">Edit answer</a></td>
             <td><a href="{{ url_for('confirm_delete_answer', answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete answer</a></td>
+            <td>
+                <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='up') }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
+                <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='down') }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

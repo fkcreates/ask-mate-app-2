@@ -147,113 +147,32 @@ def edit_question(question_id):
     return redirect(url_for("display_question", question_id=question_id))"""
 
 
+@app.route('/question/<int:question_id>/vote-up')
+def vote_for_question(question_id):
+    vote_type = request.args.get('vote_type')
+    vote_number = data_manager.get_question_vote_number(question_id)
+    increases_or_decreases_vote_number = util.vote_up_or_down(vote_number, vote_type)
+    data_manager.update_question_vote_number(question_id, increases_or_decreases_vote_number)
 
-@app.route('/question/<question_id>/vote-up')
-def question_vote_up(question_id):
-
-    """
-    ha raklikkel a vote up-ra, kap egy adatot a fgvny (pl UP = True),
-    IF UP, akkor tovabbadunk egy parametert
-    egy UPDATE sql querynek
-
-    regi kod:
-
-    data = data_manager.get_questions()
-
-    voted_dict = {}
-    for dict in data:
-        if dict["id"] == question_id:
-            voted_dict = {"id": question_id,
-                          "submission_time": dict["submission_time"],
-                          "view_number": dict["view_number"],
-                          "vote_number": int(dict["vote_number"]) + 1,
-                          "title": dict["title"],
-                          "message": dict["message"],
-                          "image": dict["image"]
-                          }
-    data_manager.update_question_vote_number(voted_dict)
-
-    return redirect(url_for("list_question"))"""
-    pass
-
-
-@app.route('/question/<question_id>/vote-down')
-def question_vote_down(question_id):
-
-    """
-    data = data_manager.get_questions()
-
-    voted_dict = {}
-    for dict in data:
-        if dict["id"] == question_id:
-            voted_dict = {"id": question_id,
-                          "submission_time": dict["submission_time"],
-                          "view_number": dict["view_number"],
-                          "vote_number": int(dict["vote_number"]) - 1,
-                          "title": dict["title"],
-                          "message": dict["message"],
-                          "image": dict["image"]
-                          }
-    data_manager.update_question_vote_number(voted_dict)
-
-    return redirect(url_for("list_question"))"""
-    pass
+    return redirect(url_for("list_question"))
 
 
 @app.route('/answer/<answer_id>/vote-down')
-def answer_vote_down(answer_id):
+def vote_for_answer(answer_id):
+    question_id = request.args.get('question_id')
+    vote_type = request.args.get('vote_type')
+    vote_number = data_manager.get_answer_vote_number(question_id, answer_id)
+    increases_or_decreases_vote_number = util.vote_up_or_down(vote_number, vote_type)
+    data_manager.update_answer_vote_number(question_id, answer_id, increases_or_decreases_vote_number)
 
-    """
-    UGYANAZ MINT A QUESTIONNEL, CSAK ANSWERRE, KULON SQL QUERY
-
-    REGI KOD:
-
-    question_id = request.args.get("question_id")
-
-    data = data_manager.get_answers()
-    voted_dict = {}
-    for dict in data:
-        if dict["id"] == answer_id:
-            voted_dict = {"id": answer_id,
-                          "submission_time": dict["submission_time"],
-                          "vote_number": int(dict["vote_number"]) - 1,
-                          "question_id": question_id,
-                          "message": dict["message"],
-                          "image": dict["image"]
-                          }
-    data_manager.update_answer_vote_number(voted_dict)
-    return redirect(url_for("display_question", question_id=question_id))"""
-    pass
-
-
-@app.route('/answer/<answer_id>/vote-up')
-def answer_vote_up(answer_id):
-
-    """
-    UGYANAZ MINT A QUESTIONNEL, CSAK ANSWERRE, KULON SQL QUERY
-
-    REGI KOD:
-    question_id = request.args.get("question_id")
-
-    data = data_manager.get_answers()
-    voted_dict = {}
-    for dict in data:
-        if dict["id"] == answer_id:
-            voted_dict = {"id": answer_id,
-                          "submission_time": dict["submission_time"],
-                          "vote_number": int(dict["vote_number"]) + 1,
-                          "question_id": dict["question_id"],
-                          "message": dict["message"],
-                          "image": dict["image"]
-                          }
-    data_manager.update_answer_vote_number(voted_dict)
-    return redirect(url_for("display_question", question_id=question_id))"""
-
-    pass
+    return redirect(url_for("display_question", question_id=question_id))
 
 
 @app.route('/answer/<answer_id>/edit', methods=["GET"])
 def route_edit_answer(answer_id):
+    question_id = request.args.get('question_id')
+    answers = data_manager.get_question_answers_data(answer_id, question_id)
+    return render_template('edit_answer.html', answers=answers, answer_id=answer_id, question_id=question_id)
 
     """
     ide kell egy SELECT query az adott answerhez,
@@ -270,35 +189,18 @@ def route_edit_answer(answer_id):
                            answer_id=answer_id,
                            question_id=question_id)"""
 
-    pass
-
 
 @app.route('/answer/<answer_id>/edit', methods=["POST"])
 def edit_answer(answer_id):
-    """
-    ide kell UPDATE query, a megadott idhoz tartozo valaszhoz
-    vigyen vissza a kerdeshez tartozo VALASZhoz, display_question.html
-
-    regi kod:
-    question_id = request.args.get("question_id")
-    answers = data_manager.get_answers()
-
-    for answer in answers:
-        if answer["id"] == answer_id:
-
-            edited_answer = { "id" : answer_id,
-                              "submission_time" : util.generate_timestamp(),
-                              "vote_number" : answer["vote_number"],
-                              "question_id" : question_id,
-                              "message" : request.form.get("message"),
-                              "image" : None
-            }
-
-    data_manager.update_edited_answer(edited_answer, answer_id)
-
-    return redirect(url_for("display_question", question_id=question_id))"""
-
-    pass
+    question_id = request.args.get('question_id')
+    new_answer = {
+                'id': answer_id,
+                'question_id': question_id,
+                'message': request.form.get('message'),
+                'image': None
+                }
+    data_manager.update_question_answer(new_answer)
+    return redirect(url_for("display_question", question_id=question_id))
 
 
 @app.route('/answer/<int:answer_id>/are-you-sure', methods=["GET"])
