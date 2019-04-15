@@ -21,6 +21,18 @@ def display_question(cursor, question_id):
     return question
 
 
+@connection.connection_handler
+def add_new_question(cursor, dict):
+    from datetime import datetime
+    dt = datetime.now().strftime("%Y-%m-%d %H:%M")
+    cursor.execute("""
+                    INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
+                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+                     """,
+                   {'submission_time': dt, 'view_number': dict['view_number'], 'vote_number':dict['vote_number'],
+                    'title': dict['title'], 'message': dict['message'], 'image': dict['image']})
+
+
 """
 def get_answers():
     data = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
