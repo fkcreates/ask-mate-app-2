@@ -7,6 +7,13 @@ app = Flask(__name__)
 
 
 @app.route('/')
+def get_last_5_questions_by_time():
+    questions = data_manager.get_last_five_question_by_time()
+    return render_template("list_questions.html",
+                           data=questions,
+                           title="Main page")
+
+
 @app.route('/list')
 def list_question():
     questions = data_manager.list_questions()
