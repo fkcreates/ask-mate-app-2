@@ -231,22 +231,37 @@ def show_answer_and_comments(answer_id):
 
 
 @app.route('/comments/<int:comment_id>/are-you-sure', methods=["GET"])
-def confirm_delete_comment_from_question(comment_id):
+def confirm_delete_comment(comment_id):
     question_id = request.args.get("question_id")
+    answer_id = request.args.get("answer_id")
 
     return render_template("confirm_delete_comment.html",
                            comment_id=comment_id,
                            question_id=question_id,
+                           answer_id=answer_id,
                            title="Are you sure you want to delete this comment?")
 
 
 @app.route('/comments/<int:comment_id>/delete', methods=["GET", "POST"])
-def delete_comment_from_question(comment_id):
+def delete_comment(comment_id):
     question_id = request.args.get("question_id")
+    answer_id = request.args.get("answer_id")
+    comments = data_manager.get_all_comments()
     data_manager.delete_comment(comment_id)
 
-    return redirect(url_for("display_question",
-                            question_id=question_id))
+    if answer_id is None:
+        answer_id = 0
+
+    for comment in comments:
+        if comment["question_id"] == int(question_id) and comment["id"] == comment_id:
+            return redirect(url_for("display_question",
+                                    question_id=question_id))
+
+        elif comment["answer_id"] == int(answer_id) and comment["id"] == comment_id:
+            return redirect(url_for("show_answer_and_comments",
+                                    answer_id=answer_id,
+                                    question_id=question_id))
+
 
 
 if __name__ == "__main__":
