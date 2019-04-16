@@ -2,10 +2,10 @@ import connection
 
 
 @connection.connection_handler
-def list_questions(cursor):
-    cursor.execute("""
+def list_questions(cursor, order_by, order):
+    cursor.execute(f"""
                     SELECT * FROM question 
-                    ORDER BY submission_time DESC;
+                    ORDER BY {order_by} {order};
                     """)
     questions = cursor.fetchall()
     return questions
