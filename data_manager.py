@@ -167,6 +167,17 @@ def update_question_answer(cursor, dict):
                     'image': dict['image']})
 
 
+@connection.connection_handler
+def get_last_five_question_by_time(cursor):
+    cursor.execute("""
+                    SELECT * FROM question
+                    ORDER BY submission_time DESC
+                    LIMIT 5;
+                    """)
+    questions = cursor.fetchall()
+    return questions
+
+
 """
 def get_answers():
     data = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
