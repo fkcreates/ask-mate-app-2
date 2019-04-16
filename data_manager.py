@@ -85,6 +85,17 @@ def add_new_data_to_table(cursor, dict, type):
                         'message': dict['message'],
                         'image': dict['image']})
 
+    elif type == "comment":
+        cursor.execute("""
+                        INSERT INTO comment(question_id, answer_id, message, submission_time, edited_count)
+                        VALUES(%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_count)s);
+                        """,
+                       {'question_id': dict['question_id'],
+                        'answer_id': dict['answer_id'],
+                        'message': dict['message'],
+                        'submission_time': dt,
+                        'edited_count': dict['edited_count']})
+
 
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
@@ -167,37 +178,6 @@ def update_question_answer(cursor, dict):
                     'image': dict['image']})
 
 
-"""
-def get_answers():
-    data = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
-    return data
-
-
-def get_questions():
-    data = connection.get_data_from_file(connection.QUESTION_FILE_PATH)
-    return data
-
-
-def write_answer_to_file(dictionary):
-    data = connection.write_data_to_file(dictionary, connection.ANSWER_FILE_PATH, connection.ANSWERS_HEADER)
-
-
-def write_question_to_file(dictionary):
-    data = connection.write_data_to_file(dictionary, connection.QUESTION_FILE_PATH, connection.QUESTIONS_HEADER)
-
-
-def update_edited_question(edited_question, question_id):
-    updated_data = connection.update_edited_question(edited_question, question_id)
-
-    return updated_data
-
-
-def update_edited_answer(edited_answer, answer_id):
-    updated_data = connection.update_edited_answer(edited_answer, answer_id)
-
-    return updated_data"""
-
-
 @connection.connection_handler
 def delete_question(cursor, question_id):
     cursor.execute("""
@@ -218,19 +198,14 @@ def delete_question(cursor, question_id):
     return question_id
 
 
-"""def delete_answers_for_deleted_question(question_id):
-    return connection.delete_answers_for_deleted_question(connection.ANSWER_FILE_PATH, question_id)
-
-
-def update_question_vote_number(dictionary):
-    connection.update_question_vote_number(dictionary, connection.QUESTION_FILE_PATH, connection.QUESTIONS_HEADER)
-
-
-def update_answer_vote_number(dictionary):
-    connection.update_question_vote_number(dictionary,connection.ANSWER_FILE_PATH, connection.ANSWERS_HEADER)
-
-
-def delete_answer_by_answer_id(answer_id):
-    connection.delete_answer_by_answer_id(answer_id)"""
+@connection.connection_handler
+def get_comments_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE question_id = %(question_id)s
+                    """,
+                   {'question_id': question_id})
+    comments = cursor.fetchall()
+    return comments
 
 
