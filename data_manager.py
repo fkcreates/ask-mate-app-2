@@ -23,7 +23,7 @@ def display_question(cursor, question_id):
 
 
 @connection.connection_handler
-def list_answers_for_question(cursor, question_id):
+def get_answers_for_question(cursor, question_id):
     cursor.execute("""
                     SELECT * FROM answer
                     WHERE question_id = %(question_id)s
@@ -32,6 +32,17 @@ def list_answers_for_question(cursor, question_id):
                    {'question_id': question_id})
     answers = cursor.fetchall()
     return answers
+
+@connection.connection_handler
+def get_answer_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT submission_time, vote_number, message FROM answer
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+
+    answer = cursor.fetchall()
+    return answer
 
 
 @connection.connection_handler
@@ -155,7 +166,7 @@ def update_answer_vote_number(cursor, question_id, answer_id, vote_number):
 
 
 @connection.connection_handler
-def get_question_answers_data(cursor, answer_id, question_id):
+def get_answer_for_question_by_id(cursor, answer_id, question_id):
     cursor.execute("""
                     SELECT * FROM answer
                     WHERE id = %(answer_id)s AND question_id = %(question_id)s;
@@ -202,9 +213,19 @@ def delete_question(cursor, question_id):
 def get_comments_for_question(cursor, question_id):
     cursor.execute("""
                     SELECT * FROM comment
-                    WHERE question_id = %(question_id)s
+                    WHERE question_id = %(question_id)s;
                     """,
                    {'question_id': question_id})
+    comments = cursor.fetchall()
+    return comments
+
+@connection.connection_handler
+def get_comments_for_answer(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE answer_id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
     comments = cursor.fetchall()
     return comments
 

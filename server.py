@@ -19,7 +19,7 @@ def list_question():
 @app.route('/question/<int:question_id>')
 def display_question(question_id):
     question = data_manager.display_question(question_id)
-    answers = data_manager.list_answers_for_question(question_id)
+    answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
 
     return render_template("display_question.html",
@@ -128,7 +128,7 @@ def vote_for_answer(answer_id):
 @app.route('/answer/<answer_id>/edit', methods=["GET"])
 def route_edit_answer(answer_id):
     question_id = request.args.get('question_id')
-    answers = data_manager.get_question_answers_data(answer_id, question_id)
+    answers = data_manager.get_answer_for_question_by_id(answer_id, question_id)
 
     return render_template('edit_answer.html',
                            answers=answers,
@@ -168,15 +168,15 @@ def delete_answer(answer_id):
 
 
 @app.route('/question/<question_id>/new-comment', methods=["GET"])
-def route_new_comment(question_id):
+def route_new_question_comment(question_id):
 
-    return render_template('add_comment.html',
+    return render_template('add_comment_for_question.html',
                            question_id=question_id,
                            title='New comment')
 
 
 @app.route('/question/<question_id>/new-comment', methods=["POST"])
-def add_new_comment(question_id):
+def add_new_question_comment(question_id):
     new_comment = {'question_id': question_id,
                     'answer_id': None,
                     'message': request.form.get("message"),
@@ -185,6 +185,44 @@ def add_new_comment(question_id):
 
     return redirect(url_for("display_question",
                             question_id=question_id))
+
+@app.route('/answer/<answer_id>/new-comment', methods=["GET"])
+def route_new_answer_comment(answer_id):
+    question_id = request.args.get("question_id")
+    return render_template('add_comment_for_answer.html',
+                           answer_id=answer_id,
+                           question_id=question_id,
+                           title='New comment')
+
+@app.route('/answer/<int:answer_id>/new-comment', methods=["POST"])
+def add_new_answer_comment(answer_id):
+    question_id = request.args.get("question_id")
+    new_comment = {
+                    'question_id': None,
+                    'answer_id': answer_id,
+                    'message': request.form.get("message"),
+                    'edited_count': None
+                    }
+    data_manager.add_new_data_to_table(new_comment, 'comment')
+
+    return redirect(url_for("show_answer_and_comments",
+                            answer_id=answer_id,
+                            question_id=question_id))
+
+@app.route('/question/show-answer/<int:answer_id>', methods=["GET"])
+def show_answer_and_comments(answer_id):
+    question_id = request.args.get("question_id")
+    answer = data_manager.get_answer_by_answer_id(answer_id)
+    comments_for_answer = data_manager.get_comments_for_answer(answer_id)
+
+    return render_template('display_answer_with_comments.html',
+                           comments=comments_for_answer,
+                           answer=answer,
+                           answer_id=answer_id,
+                           question_id=question_id,
+                           title="Answer and comments")
+
+
 
 
 if __name__ == "__main__":

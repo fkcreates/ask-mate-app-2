@@ -50,7 +50,7 @@
         {% endfor %}
         </tbody>
     </table>
-    <p><a href="{{ url_for('route_new_comment', question_id=question_id) }}">Add new comment</a></p>
+    <p><a href="{{ url_for('route_new_question_comment', question_id=question_id) }}">Add new comment</a></p>
     <br>
     <h4>Answers</h4>
     <table>
@@ -59,6 +59,7 @@
             <th>Submission<br>time</th>
             <th>Vote<br>number</th>
             <th>Message</th>
+            <th>Check comments</th>
             <th>Edit answer</th>
             <th>Delete answer</th>
             <th>Vote</th>
@@ -70,6 +71,7 @@
                 <td>{{ answer["submission_time"] }}</td>
                 <td>{{ answer["vote_number"] }}</td>
                 <td>{{ answer["message"] }}</td>
+                <td><a href="{{ url_for('show_answer_and_comments', answer_id=answer["id"], question_id=question_id) }}">Check comments</a></td>
                 <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"], question_id=question_id) }}">Edit answer</a></td>
                 <td><a href="{{ url_for('confirm_delete_answer', answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete answer</a></td>
                 <td>

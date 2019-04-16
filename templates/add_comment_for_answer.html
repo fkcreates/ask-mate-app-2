@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1>Add new comment</h1>
-    <form action="{{ url_for("add_new_comment", question_id=question_id) }}" method="POST">
+    <form action="{{ url_for("add_new_answer_comment", answer_id=answer_id, question_id=question_id) }}" method="POST">
         <p>Your comment<br>
             <textarea cols="50" rows="10" name="message" autofocus required minlength="10"></textarea>
         </p>
