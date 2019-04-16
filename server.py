@@ -231,6 +231,23 @@ def show_answer_and_comments(answer_id):
                            title="Answer and comments")
 
 
+@app.route('/comments/<int:comment_id>/are-you-sure', methods=["GET"])
+def confirm_delete_comment_from_question(comment_id):
+    question_id = request.args.get("question_id")
+
+    return render_template("confirm_delete_comment.html",
+                           comment_id=comment_id,
+                           question_id=question_id,
+                           title="Are you sure you want to delete this comment?")
+
+
+@app.route('/comments/<int:comment_id>/delete', methods=["GET", "POST"])
+def delete_comment_from_question(comment_id):
+    question_id = request.args.get("question_id")
+    data_manager.delete_comment(comment_id)
+
+    return redirect(url_for("display_question",
+                            question_id=question_id))
 
 
 if __name__ == "__main__":

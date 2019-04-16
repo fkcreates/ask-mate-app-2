@@ -261,6 +261,7 @@ def get_comments_for_question(cursor, question_id):
     comments = cursor.fetchall()
     return comments
 
+
 @connection.connection_handler
 def get_comments_for_answer(cursor, answer_id):
     cursor.execute("""
@@ -272,3 +273,10 @@ def get_comments_for_answer(cursor, answer_id):
     return comments
 
 
+@connection.connection_handler
+def delete_comment(cursor, comment_id):
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {'comment_id': comment_id})
