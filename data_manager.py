@@ -70,6 +70,16 @@ def edit_question(cursor, question_id, edited_title, edited_message):
 
 
 @connection.connection_handler
+def increase_view_number(cursor, question_id):
+    cursor.execute("""
+                   UPDATE question
+                   SET view_number = view_number + 1
+                   WHERE id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
+
+
+@connection.connection_handler
 def add_new_data_to_table(cursor, dict, type):
     from datetime import datetime
     dt = datetime.now().strftime("%Y-%m-%d %H:%M")

@@ -29,6 +29,7 @@ def display_question(question_id):
     question = data_manager.display_question(question_id)
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
+    data_manager.increase_view_number(question_id)
 
     return render_template("display_question.html",
                            question_id=question_id,
