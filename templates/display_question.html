@@ -6,10 +6,10 @@
 
 
 {% block content %}
-<h1>{{ title }}</h1>
+    <h1>{{ title }}</h1>
     <h3>Question</h3>
-<table>
-    <thead>
+    <table>
+        <thead>
         <tr>
             <th>Submission<br>time</th>
             <th>View<br>number</th>
@@ -17,27 +17,44 @@
             <th>Title</th>
             <th>Message</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for row in question %}
-        <tr>
-            <td>{{ row["submission_time"] }}</td>
-            <td>{{ row["view_number"] }}</td>
-            <td>{{ row["vote_number"] }}</td>
-            <td>{{ row["title"] }}</td>
-            <td>{{ row["message"] }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for row in question %}
+            <tr>
+                <td>{{ row["submission_time"] }}</td>
+                <td>{{ row["view_number"] }}</td>
+                <td>{{ row["vote_number"] }}</td>
+                <td>{{ row["title"] }}</td>
+                <td>{{ row["message"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     <p><a href="{{ url_for('route_edit_question', question_id=question_id) }}">Edit this question</a></p>
     <p><a href="{{ url_for('confirm_delete_question', question_id=question_id) }}">Delete question</a></p>
     <br>
-    <p><a href="{{ url_for('route_new_answer', question_id=question_id) }}">Add new answer</a></p>
+    <h4>Comments</h4>
+    <table>
+        <thead>
+        <tr>
+            <th>Submission<br>time</th>
+            <th>Message</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+            <tr>
+                <td>{{ comment["submission_time"] }}</td>
+                <td>{{ comment["message"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p><a href="{{ url_for('route_new_comment', question_id=question_id) }}">Add new comment</a></p>
     <br>
-        <h3>Answers</h3>
-<table>
-    <thead>
+    <h4>Answers</h4>
+    <table>
+        <thead>
         <tr>
             <th>Submission<br>time</th>
             <th>Vote<br>number</th>
@@ -65,5 +82,23 @@
 </table>
 
 <p><a href="{{ url_for('list_question') }}">Back to home</a></p>
-
+        </thead>
+        <tbody>
+        {% for answer in answers %}
+            <tr>
+                <td>{{ answer["submission_time"] }}</td>
+                <td>{{ answer["vote_number"] }}</td>
+                <td>{{ answer["message"] }}</td>
+                <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"], question_id=question_id) }}">Edit answer</a></td>
+                <td><a href="{{ url_for('confirm_delete_answer', answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete answer</a></td>
+                <td>
+                    <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='up') }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
+                    <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='down') }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p><a href="{{ url_for('route_new_answer', question_id=question_id) }}">Add new answer</a></p>
+    <p><a href="{{ url_for('list_question') }}">Back to home</a></p>
 {% endblock %}
