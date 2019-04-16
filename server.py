@@ -14,10 +14,11 @@ def get_last_5_questions_by_time():
                            title="Main page")
 
 
-@app.route('/list')
+@app.route('/list', methods=["GET", "POST"])
 def list_question():
-    questions = data_manager.list_questions()
-
+    order_by = request.form.get('order_by')
+    order = request.form.get('order')
+    questions = data_manager.list_questions(order_by, order)
     return render_template("list_questions.html",
                            data=questions,
                            title="List questions")
@@ -28,6 +29,7 @@ def display_question(question_id):
     question = data_manager.display_question(question_id)
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
+    data_manager.increase_view_number(question_id)
 
     return render_template("display_question.html",
                            question_id=question_id,
