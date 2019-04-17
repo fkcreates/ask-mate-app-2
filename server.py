@@ -16,8 +16,8 @@ def get_last_5_questions_by_time():
 
 @app.route('/list', methods=["GET", "POST"])
 def list_question():
-    order_by = request.form.get('order_by')
-    order = request.form.get('order')
+    order_by = request.args.get('order_by')
+    order = request.args.get('order')
     questions = data_manager.list_questions(order_by, order)
     return render_template("list_questions.html",
                            data=questions,
@@ -115,11 +115,13 @@ def edit_question(question_id):
 @app.route('/question/<int:question_id>/vote')
 def vote_for_question(question_id):
     vote_type = request.args.get('vote_type')
-
+    title = request.args.get('title')
     vote_number = data_manager.get_question_vote_number(question_id)
     increases_or_decreases_vote_number = util.vote_up_or_down(vote_number, vote_type)
     data_manager.update_question_vote_number(question_id, increases_or_decreases_vote_number)
-    return redirect(url_for("get_last_5_questions_by_time"))
+    if title == 'Main page':
+        return redirect(url_for("get_last_5_questions_by_time"))
+    return redirect(url_for("list_question"))
 
 
 @app.route('/answer/<answer_id>/vote')
@@ -268,7 +270,8 @@ def delete_comment(comment_id):
         return redirect(url_for("show_answer_and_comments",
                                 answer_id=answer_id,
                                 question_id=question_id))
-    
+
+
 @app.route('/comments/<comment_id>/edit', methods=["GET"])
 def route_edit_comment(comment_id):
     question_id = request.args.get("question_id")
@@ -279,6 +282,7 @@ def route_edit_comment(comment_id):
                            comment=comment_to_edit,
                            question_id=question_id,
                            title="Edit comment")
+
 
 @app.route('/comments/<comment_id>/edit', methods=["POST"])
 def edit_comment(comment_id):

@@ -9,17 +9,17 @@
 <h1>{{ title }}</h1>
     <p><a href="{{ url_for('route_question') }}">Add new question</a></p>
     <p>
-        <form action="{{ url_for('list_question', order_by=order_by, order=order) }}" method="POST">
+        <form action="{{ url_for('list_question', order_by=order_by, order=order) }}" method="GET">
             <label for="order_by">Sort questions by: </label>
             <select name="order_by" id="order_by">
-                <option value="submission_time">Submission time</option>
+                <option value="submission_time" selected="selected">Submission time</option>
                 <option value="view_number">View number</option>
                 <option value="vote_number">Vote number</option>
                 <option value="title">Title</option>
             </select>
             <label for="order">Order: </label>
             <select name="order" id="order">
-                <option value="DESC">Descending</option>
+                <option value="DESC" selected="selected">Descending</option>
                 <option value="ASC">Ascending</option>
             </select>
             <p>
@@ -45,15 +45,15 @@
             <td>{{ row["vote_number"] }}</td>
             <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
             <td>
-                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='up') }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
-                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='down') }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='up', title=title) }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
+                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='down', title=title) }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
     {% if "Main page" == title %}
-        <p><a href="{{ url_for('list_question') }}">List all questions!</a></p>
+        <p><a href="{{ url_for('list_question', order_by = 'submission_time', order = 'DESC') }}">List all questions!</a></p>
         {% else %}
         <p><a href="{{ url_for('get_last_5_questions_by_time') }}">Go to the main page!</a></p>
     {% endif %}
