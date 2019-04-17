@@ -33,6 +33,8 @@
         <tr>
             <th>Submission<br>time</th>
             <th>Message</th>
+            <th>Edited count</th>
+            <th>Delete comment</th>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +42,8 @@
             <tr>
                 <td>{{ comment["submission_time"] }}</td>
                 <td>{{ comment["message"] }}</td>
+                <td>{{ comment["edited_count"] }}</td>
+                <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment["id"], question_id=question_id, answer_id=comment["answer_id"]) }}">Delete comment</a></td>
             </tr>
         {% endfor %}
         </tbody>

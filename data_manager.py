@@ -2,10 +2,10 @@ import connection
 
 
 @connection.connection_handler
-def list_questions(cursor):
-    cursor.execute("""
+def list_questions(cursor, order_by, order):
+    cursor.execute(f"""
                     SELECT * FROM question 
-                    ORDER BY submission_time DESC;
+                    ORDER BY {order_by} {order};
                     """)
     questions = cursor.fetchall()
     return questions
@@ -67,6 +67,16 @@ def edit_question(cursor, question_id, edited_title, edited_message):
                    {'question_id': question_id,
                     'edited_title': edited_title,
                     'edited_message': edited_message})
+
+
+@connection.connection_handler
+def increase_view_number(cursor, question_id):
+    cursor.execute("""
+                   UPDATE question
+                   SET view_number = view_number + 1
+                   WHERE id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
 
 
 @connection.connection_handler
@@ -200,37 +210,6 @@ def get_last_five_question_by_time(cursor):
     return questions
 
 
-"""
-def get_answers():
-    data = connection.get_data_from_file(connection.ANSWER_FILE_PATH)
-    return data
-
-
-def get_questions():
-    data = connection.get_data_from_file(connection.QUESTION_FILE_PATH)
-    return data
-
-
-def write_answer_to_file(dictionary):
-    data = connection.write_data_to_file(dictionary, connection.ANSWER_FILE_PATH, connection.ANSWERS_HEADER)
-
-
-def write_question_to_file(dictionary):
-    data = connection.write_data_to_file(dictionary, connection.QUESTION_FILE_PATH, connection.QUESTIONS_HEADER)
-
-
-def update_edited_question(edited_question, question_id):
-    updated_data = connection.update_edited_question(edited_question, question_id)
-
-    return updated_data
-
-
-def update_edited_answer(edited_answer, answer_id):
-    updated_data = connection.update_edited_answer(edited_answer, answer_id)
-
-    return updated_data"""
-
-
 @connection.connection_handler
 def delete_question(cursor, question_id):
     cursor.execute("""
@@ -247,8 +226,6 @@ def delete_question(cursor, question_id):
                    WHERE id = %(question_id)s;
                    """,
                    {'question_id': question_id})
-    question_id = question_id
-    return question_id
 
 
 @connection.connection_handler
@@ -261,6 +238,7 @@ def get_comments_for_question(cursor, question_id):
     comments = cursor.fetchall()
     return comments
 
+
 @connection.connection_handler
 def get_comments_for_answer(cursor, answer_id):
     cursor.execute("""
@@ -270,5 +248,48 @@ def get_comments_for_answer(cursor, answer_id):
                    {'answer_id': answer_id})
     comments = cursor.fetchall()
     return comments
+
+@connection.connection_handler
+def get_all_comments(cursor):
+    cursor.execute("""
+                    SELECT * FROM comment;
+                    """)
+
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection.connection_handler
+def delete_comment(cursor, comment_id):
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {'comment_id': comment_id})
+
+
+@connection.connection_handler
+def route_edit_comment(cursor, comment_id):
+    cursor.execute("""
+                    SELECT message, submission_time, edited_count FROM comment
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {'comment_id': comment_id})
+    comment_to_edit = cursor.fetchall()
+    return comment_to_edit
+
+@connection.connection_handler
+def edit_comment(cursor, comment_id, message):
+    from datetime import datetime
+    dt = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    cursor.execute("""
+                    UPDATE comment
+                    SET submission_time = %(submission_time)s, message = %(message)s, edited_count = edited_count + 1
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {'comment_id': comment_id,
+                    'message': message,
+                    'submission_time': dt})
 
 

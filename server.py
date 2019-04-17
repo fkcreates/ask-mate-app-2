@@ -14,10 +14,11 @@ def get_last_5_questions_by_time():
                            title="Main page")
 
 
-@app.route('/list')
+@app.route('/list', methods=["GET", "POST"])
 def list_question():
-    questions = data_manager.list_questions()
-
+    order_by = request.form.get('order_by')
+    order = request.form.get('order')
+    questions = data_manager.list_questions(order_by, order)
     return render_template("list_questions.html",
                            data=questions,
                            title="List questions")
@@ -28,6 +29,7 @@ def display_question(question_id):
     question = data_manager.display_question(question_id)
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
+    data_manager.increase_view_number(question_id)
 
     return render_template("display_question.html",
                            question_id=question_id,
@@ -140,7 +142,8 @@ def route_edit_answer(answer_id):
     return render_template('edit_answer.html',
                            answers=answers,
                            answer_id=answer_id,
-                           question_id=question_id)
+                           question_id=question_id,
+                           title="Edit answer")
 
 
 @app.route('/answer/<answer_id>/edit', methods=["POST"])
@@ -152,7 +155,8 @@ def edit_answer(answer_id):
                 'image': None}
     data_manager.update_question_answer(new_answer)
 
-    return redirect(url_for("display_question", question_id=question_id))
+    return redirect(url_for("display_question",
+                            question_id=question_id))
 
 
 @app.route('/answer/<int:answer_id>/are-you-sure', methods=["GET"])
@@ -187,7 +191,7 @@ def add_new_question_comment(question_id):
     new_comment = {'question_id': question_id,
                     'answer_id': None,
                     'message': request.form.get("message"),
-                    'edited_count': None}
+                    'edited_count': 0}
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
     return redirect(url_for("display_question",
@@ -231,6 +235,60 @@ def show_answer_and_comments(answer_id):
                            answer_id=answer_id,
                            question_id=question_id,
                            title="Answer and comments")
+
+
+@app.route('/comments/<int:comment_id>/are-you-sure', methods=["GET"])
+def confirm_delete_comment(comment_id):
+    question_id = request.args.get("question_id")
+    answer_id = request.args.get("answer_id")
+
+    return render_template("confirm_delete_comment.html",
+                           comment_id=comment_id,
+                           question_id=question_id,
+                           answer_id=answer_id,
+                           title="Are you sure you want to delete this comment?")
+
+
+@app.route('/comments/<int:comment_id>/delete', methods=["GET", "POST"])
+def delete_comment(comment_id):
+    question_id = request.args.get("question_id")
+    answer_id = request.args.get("answer_id")
+    comments = data_manager.get_all_comments()
+    data_manager.delete_comment(comment_id)
+
+    if answer_id is None:
+        answer_id = 0
+
+    decision = util.deciding_where_to_redirect(comments, comment_id, answer_id, question_id)
+
+    if decision == "question":
+        return redirect(url_for("display_question",
+                                question_id=question_id))
+    elif decision == "answer":
+        return redirect(url_for("show_answer_and_comments",
+                                answer_id=answer_id,
+                                question_id=question_id))
+    
+@app.route('/comments/<comment_id>/edit', methods=["GET"])
+def route_edit_comment(comment_id):
+    question_id = request.args.get("question_id")
+    comment_to_edit = data_manager.route_edit_comment(comment_id)
+
+    return render_template("edit_comment.html",
+                           comment_id=comment_id,
+                           comment=comment_to_edit,
+                           question_id=question_id,
+                           title="Edit comment")
+
+@app.route('/comments/<comment_id>/edit', methods=["POST"])
+def edit_comment(comment_id):
+    question_id = request.args.get("question_id")
+    updated_comment = request.form.get("message")
+
+    data_manager.edit_comment(comment_id, updated_comment)
+
+    return redirect(url_for("display_question",
+                            question_id=question_id))
 
 
 if __name__ == "__main__":
