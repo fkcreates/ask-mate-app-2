@@ -219,7 +219,7 @@ def add_new_answer_comment(answer_id):
                     'question_id': None,
                     'answer_id': answer_id,
                     'message': request.form.get("message"),
-                    'edited_count': None
+                    'edited_count': 0
                     }
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
