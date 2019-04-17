@@ -11,15 +11,10 @@
     <button type="submit">Yes</button>
 </form>
 <br>
-{% if answer_id != None %}
-    <form action="{{ url_for('show_answer_and_comments', question_id=question_id, answer_id=answer_id) }}">
-        <button type="submit">No</button>
-    </form>
-{% else %}
     <form action="{{ url_for('display_question', question_id=question_id) }}">
         <button type="submit">No</button>
     </form>
-{% endif %}
+
 </body>
 
 {% endblock %}
