@@ -110,17 +110,17 @@ def edit_question(question_id):
                             question_id=question_id))
 
 
-@app.route('/question/<int:question_id>/vote-up')
+@app.route('/question/<int:question_id>/vote')
 def vote_for_question(question_id):
     vote_type = request.args.get('vote_type')
+
     vote_number = data_manager.get_question_vote_number(question_id)
     increases_or_decreases_vote_number = util.vote_up_or_down(vote_number, vote_type)
     data_manager.update_question_vote_number(question_id, increases_or_decreases_vote_number)
+    return redirect(url_for("get_last_5_questions_by_time"))
 
-    return redirect(url_for("list_question"))
 
-
-@app.route('/answer/<answer_id>/vote-down')
+@app.route('/answer/<answer_id>/vote')
 def vote_for_answer(answer_id):
     question_id = request.args.get('question_id')
     vote_type = request.args.get('vote_type')
@@ -193,6 +193,7 @@ def add_new_question_comment(question_id):
     return redirect(url_for("display_question",
                             question_id=question_id))
 
+
 @app.route('/answer/<answer_id>/new-comment', methods=["GET"])
 def route_new_answer_comment(answer_id):
     question_id = request.args.get("question_id")
@@ -200,6 +201,7 @@ def route_new_answer_comment(answer_id):
                            answer_id=answer_id,
                            question_id=question_id,
                            title='New comment')
+
 
 @app.route('/answer/<int:answer_id>/new-comment', methods=["POST"])
 def add_new_answer_comment(answer_id):
@@ -216,6 +218,7 @@ def add_new_answer_comment(answer_id):
                             answer_id=answer_id,
                             question_id=question_id))
 
+
 @app.route('/question/show-answer/<int:answer_id>', methods=["GET"])
 def show_answer_and_comments(answer_id):
     question_id = request.args.get("question_id")
@@ -228,8 +231,6 @@ def show_answer_and_comments(answer_id):
                            answer_id=answer_id,
                            question_id=question_id,
                            title="Answer and comments")
-
-
 
 
 if __name__ == "__main__":
