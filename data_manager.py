@@ -280,11 +280,16 @@ def route_edit_comment(cursor, comment_id):
 
 @connection.connection_handler
 def edit_comment(cursor, comment_id, message):
+    from datetime import datetime
+    dt = datetime.now().strftime("%Y-%m-%d %H:%M")
+
     cursor.execute("""
                     UPDATE comment
-                    SET message = %(message)s, edited_count = edited_count + 1
+                    SET submission_time = %(submission_time)s, message = %(message)s, edited_count = edited_count + 1
                     WHERE id = %(comment_id)s;
                     """,
                    {'comment_id': comment_id,
-                    'message': message})
+                    'message': message,
+                    'submission_time': dt})
+
 
