@@ -17,5 +17,8 @@
         <button type="submit">Submit</button>
     </form>
 
+    <p>
+        <a href="{{ url_for("display_question", question_id=question_id) }}">Go back to question</a>
+    </p>
 
 {% endblock %}
