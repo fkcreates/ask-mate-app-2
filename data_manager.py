@@ -277,3 +277,14 @@ def route_edit_comment(cursor, comment_id):
                    {'comment_id': comment_id})
     comment_to_edit = cursor.fetchall()
     return comment_to_edit
+
+@connection.connection_handler
+def edit_comment(cursor, comment_id, message):
+    cursor.execute("""
+                    UPDATE comment
+                    SET message = %(message)s, edited_count = edited_count + 1
+                    WHERE id = %(comment_id)s;
+                    """,
+                   {'comment_id': comment_id,
+                    'message': message})
+

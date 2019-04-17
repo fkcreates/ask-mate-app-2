@@ -256,7 +256,7 @@ def delete_comment(comment_id):
     if answer_id is None:
         answer_id = 0
 
-    decision = util.deciding_which_comment_to_delete(comments, comment_id, answer_id, question_id)
+    decision = util.deciding_where_to_redirect(comments, comment_id, answer_id, question_id)
 
     if decision == "question":
         return redirect(url_for("display_question",
@@ -268,13 +268,24 @@ def delete_comment(comment_id):
     
 @app.route('/comments/<comment_id>/edit', methods=["GET"])
 def route_edit_comment(comment_id):
+    question_id = request.args.get("question_id")
     comment_to_edit = data_manager.route_edit_comment(comment_id)
 
     return render_template("edit_comment.html",
+                           comment_id=comment_id,
                            comment=comment_to_edit,
+                           question_id=question_id,
                            title="Edit comment")
 
+@app.route('/comments/<comment_id>/edit', methods=["POST"])
+def edit_comment(comment_id):
+    question_id = request.args.get("question_id")
+    updated_comment = request.form.get("message")
 
+    data_manager.edit_comment(comment_id, updated_comment)
+
+    return redirect(url_for("display_question",
+                            question_id=question_id))
 
 
 if __name__ == "__main__":

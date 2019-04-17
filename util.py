@@ -11,7 +11,7 @@ def vote_up_or_down(vote_number, vote_type):
     return vote_number['vote_number']
 
 
-def deciding_which_comment_to_delete(comments, comment_id, answer_id, question_id):
+def deciding_where_to_redirect(comments, comment_id, answer_id, question_id):
     for comment in comments:
         if comment["question_id"] == int(question_id) and comment["id"] == comment_id:
             return "question"
