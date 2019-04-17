@@ -18,5 +18,3 @@ def deciding_where_to_redirect(comments, comment_id, answer_id, question_id):
 
         elif comment["answer_id"] == int(answer_id) and comment["id"] == comment_id:
             return "answer"
-
-

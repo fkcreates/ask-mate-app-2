@@ -16,12 +16,23 @@ def get_last_5_questions_by_time():
 
 @app.route('/list', methods=["GET", "POST"])
 def list_question():
+    order_by_options = ['submission_time', 'view_number', 'vote_number', 'title']
+    order_options = ['DESC', 'ASC']
     order_by = request.args.get('order_by')
     order = request.args.get('order')
-    questions = data_manager.list_questions(order_by, order)
+    if order is not None:
+        questions = data_manager.list_questions(order_by, order)
+    else:
+        order_by = 'submission_time'
+        order = 'DESC'
+        questions = data_manager.list_questions(order_by, order)
     return render_template("list_questions.html",
                            data=questions,
-                           title="List questions")
+                           title="List questions",
+                           select_options=order_by_options,
+                           order_options=order_options,
+                           order_by=order_by,
+                           order=order)
 
 
 @app.route('/question/<int:question_id>')

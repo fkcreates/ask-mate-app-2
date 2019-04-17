@@ -2,7 +2,7 @@ import connection
 
 
 @connection.connection_handler
-def list_questions(cursor, order_by='submission_time', order='ASC'):
+def list_questions(cursor, order_by, order):
     cursor.execute(f"""
                     SELECT * FROM question 
                     ORDER BY {order_by} {order};
