@@ -191,7 +191,7 @@ def add_new_question_comment(question_id):
     new_comment = {'question_id': question_id,
                     'answer_id': None,
                     'message': request.form.get("message"),
-                    'edited_count': None}
+                    'edited_count': 0}
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
     return redirect(url_for("display_question",
