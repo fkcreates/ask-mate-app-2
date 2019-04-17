@@ -254,16 +254,15 @@ def delete_comment(comment_id):
     if answer_id is None:
         answer_id = 0
 
-    for comment in comments:
-        if comment["question_id"] == int(question_id) and comment["id"] == comment_id:
-            return redirect(url_for("display_question",
-                                    question_id=question_id))
+    decision = util.deciding_which_comment_to_delete(comments, comment_id, answer_id, question_id)
 
-        elif comment["answer_id"] == int(answer_id) and comment["id"] == comment_id:
-            return redirect(url_for("show_answer_and_comments",
-                                    answer_id=answer_id,
-                                    question_id=question_id))
-
+    if decision == "question":
+        return redirect(url_for("display_question",
+                                question_id=question_id))
+    elif decision == "answer":
+        return redirect(url_for("show_answer_and_comments",
+                                answer_id=answer_id,
+                                question_id=question_id))
 
 
 if __name__ == "__main__":
