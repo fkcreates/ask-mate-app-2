@@ -142,7 +142,8 @@ def route_edit_answer(answer_id):
     return render_template('edit_answer.html',
                            answers=answers,
                            answer_id=answer_id,
-                           question_id=question_id)
+                           question_id=question_id,
+                           title="Edit answer")
 
 
 @app.route('/answer/<answer_id>/edit', methods=["POST"])
@@ -154,7 +155,8 @@ def edit_answer(answer_id):
                 'image': None}
     data_manager.update_question_answer(new_answer)
 
-    return redirect(url_for("display_question", question_id=question_id))
+    return redirect(url_for("display_question",
+                            question_id=question_id))
 
 
 @app.route('/answer/<int:answer_id>/are-you-sure', methods=["GET"])
@@ -263,6 +265,16 @@ def delete_comment(comment_id):
         return redirect(url_for("show_answer_and_comments",
                                 answer_id=answer_id,
                                 question_id=question_id))
+    
+@app.route('/comments/<comment_id>/edit', methods=["GET"])
+def route_edit_comment(comment_id):
+    comment_to_edit = data_manager.route_edit_comment(comment_id)
+
+    return render_template("edit_comment.html",
+                           comment=comment_to_edit,
+                           title="Edit comment")
+
+
 
 
 if __name__ == "__main__":

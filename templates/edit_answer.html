@@ -6,7 +6,7 @@
 
 
 {% block content %}
-<h1>{{ title }}</h1>
+    <h1>{{ title }}</h1>
     <h3>Edit answer</h3>
     <form action="{{ url_for("edit_answer", answer_id=answer_id, question_id=question_id) }}" method="POST">
         {% for answer in answers %}
@@ -17,6 +17,10 @@
         <br>
         <button type="submit">Submit</button>
     </form>
+
+    <p>
+        <a href="{{ url_for("display_question", question_id=question_id) }}">Go back to question</a>
+    </p>
 
 
 {% endblock %}
