@@ -13,12 +13,9 @@
         <form action="{{ url_for('list_question', order_by=order_by, order=order) }}" method="GET">
             <label for="order_by">Sort questions by: </label>
             <select name="order_by" id="order_by">
-                {% for option in select_options %}
-                    <option
-                        {% if option == order_by %}
-                            selected
-                        {% endif %}
-                 value="{{ option }}">{{ option }}</option>
+                {% for key, option in select_options.items() %}
+                    <option {% if key == order_by %}selected{% endif %}
+                            value="{{ key }}">{{ option }}</option>
                 {% endfor %}
             </select>
             <label for="order">Order: </label>
