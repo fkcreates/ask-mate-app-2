@@ -99,25 +99,27 @@ def add_new_data_to_table(cursor, dict, type):
 
     elif type == "answer":
         cursor.execute("""
-                        INSERT INTO answer(submission_time, vote_number, question_id, message, image)
-                        VALUES(%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s);
+                        INSERT INTO answer(submission_time, vote_number, question_id, message, image, user_id)
+                        VALUES(%(submission_time)s, %(vote_number)s, %(question_id)s, %(message)s, %(image)s, %(user_id)s);
                         """,
                        {'submission_time': dt,
                         'vote_number': dict['vote_number'],
                         'question_id': dict['question_id'],
                         'message': dict['message'],
-                        'image': dict['image']})
+                        'image': dict['image'],
+                        'user_id': dict['user_id']})
 
     elif type == "comment":
         cursor.execute("""
-                        INSERT INTO comment(question_id, answer_id, message, submission_time, edited_count)
-                        VALUES(%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_count)s);
+                        INSERT INTO comment(question_id, answer_id, message, submission_time, edited_count, user_id)
+                        VALUES(%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_count)s, %(user_id)s);
                         """,
                        {'question_id': dict['question_id'],
                         'answer_id': dict['answer_id'],
                         'message': dict['message'],
                         'submission_time': dt,
-                        'edited_count': dict['edited_count']})
+                        'edited_count': dict['edited_count'],
+                        'user_id': dict['user_id']})
     elif type == "userdata":
         cursor.execute("""
                         INSERT INTO userdata(user_name, hashed_pw, reg_date, reputation)

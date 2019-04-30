@@ -69,7 +69,8 @@ def add_question():
                     "vote_number": 0,
                     "title": request.form.get("title"),
                     "message": request.form.get("message"),
-                    "image": None}
+                    "image": None,
+                    "user_id": user['user_id']}
     data_manager.add_new_data_to_table(new_question, 'question')
 
     return redirect(url_for("list_question",
@@ -108,7 +109,8 @@ def post_answer(question_id):
     new_answer = {'vote_number': 0,
                   'question_id': question_id,
                   'message': request.form.get('message'),
-                  'image': None}
+                  'image': None,
+                  'user_id': user['user_id']}
     data_manager.add_new_data_to_table(new_answer, 'answer')
 
     return redirect(url_for("display_question",
@@ -183,9 +185,10 @@ def edit_answer(answer_id):
     user = util.check_if_logged_in()
     question_id = request.args.get('question_id')
     new_answer = {'id': answer_id,
-                'question_id': question_id,
-                'message': request.form.get('message'),
-                'image': None}
+                  'question_id': question_id,
+                  'message': request.form.get('message'),
+                  'image': None,
+                  'user_id': user['user_id']}
     data_manager.update_question_answer(new_answer)
 
     return redirect(url_for("display_question",
@@ -229,9 +232,10 @@ def route_new_question_comment(question_id):
 def add_new_question_comment(question_id):
     user = util.check_if_logged_in()
     new_comment = {'question_id': question_id,
-                    'answer_id': None,
-                    'message': request.form.get("message"),
-                    'edited_count': 0}
+                   'answer_id': None,
+                   'message': request.form.get("message"),
+                   'edited_count': 0,
+                   'user_id': user['user_id']}
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
     return redirect(url_for("display_question",
@@ -258,7 +262,8 @@ def add_new_answer_comment(answer_id):
                     'question_id': None,
                     'answer_id': answer_id,
                     'message': request.form.get("message"),
-                    'edited_count': 0
+                    'edited_count': 0,
+                    'user_id': user['user_id']
                     }
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
