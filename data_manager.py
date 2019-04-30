@@ -116,6 +116,15 @@ def add_new_data_to_table(cursor, dict, type):
                         'message': dict['message'],
                         'submission_time': dt,
                         'edited_count': dict['edited_count']})
+    elif type == "userdata":
+        cursor.execute("""
+                        INSERT INTO userdata(user_name, hashed_pw, reg_date, reputation)
+                        VALUES(%(user_name)s, %(hashed_pw)s, %(reg_date)s, %(reputation)s);
+                        """,
+                       {'user_name': dict['user_name'],
+                        'hashed_pw': dict['hashed_pw'],
+                        'reg_date': dt,
+                        'reputation': 0})
 
 
 @connection.connection_handler
