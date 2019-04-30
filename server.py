@@ -370,7 +370,7 @@ def user_registration():
                            error_message='This user name is already taken!')
     else:
         data_manager.add_new_data_to_table(new_user_data, 'userdata')
-        return redirect(url_for('get_last_5_questions_by_time'))
+        return redirect(url_for('user_login'))
 
 
 if __name__ == "__main__":
