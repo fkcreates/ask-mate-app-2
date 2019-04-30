@@ -20,4 +20,9 @@
 
     <p><a href="{{ url_for("get_last_5_questions_by_time") }}">Go back to main page</a></p>
     </form>
+
+    {% if error_message is defined %}
+        {{ error_message }}
+    {% endif %}
+
 {% endblock %}
