@@ -7,11 +7,11 @@
 {% block content %}
     <form action="{{ url_for('user_registration') }}" method="POST">
         <p>User name<br>
-        <input type="text" name="user_name" required size="50">
+        <input type="text" name="user_name" required size="20">
         </p>
 
         <p>Password<br>
-        <input type="text" name="password" required size="50">
+        <input type="password" name="password" required size="20" minlength="3">
         </p>
         <br>
         <button type="submit">Regist!</button>
