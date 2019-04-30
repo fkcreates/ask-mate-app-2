@@ -3,6 +3,7 @@ from datetime import datetime
 import bcrypt
 
 
+
 def vote_up_or_down(vote_number, vote_type):
     if vote_type == 'up':
         vote_number['vote_number'] += 1
@@ -32,3 +33,9 @@ def order_questions(order_by, order):
 def verify_password(plain_text_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+def get_user_name_and_id(session):
+    return {
+        'user_name': session['user_name'],
+        'user_id': session['user_id']
+    }

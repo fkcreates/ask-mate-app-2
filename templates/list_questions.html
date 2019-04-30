@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block content %}
-<button><a href="{{ url_for("route_user_login") }}">Login</a></button>
+    {% if user == None %}
+        <button><a href="{{ url_for("route_user_login") }}">Login</a></button>
+    {% else %}
+        <button><a href="{{ url_for("route_user_logout") }}">Logout</a></button>
+    {% endif %}
 
 <h1>{{ title }}</h1>
     <p><a href="{{ url_for('route_question') }}">Add new question</a></p>

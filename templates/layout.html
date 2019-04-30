@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome{% endblock %} | Ask Mate App</title>
     {% block style %}<link rel="stylesheet" href="/static/style.css">{% endblock %}
+    {% if user %}
+        <p>You are logged in as {{ user['user_name'] }}</p>
+    {% else %}
+        <p>You are not logged in</p>
+    {% endif %}
 
 </head>
 <body>

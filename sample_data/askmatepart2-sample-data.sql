@@ -126,8 +126,7 @@ ALTER TABLE ONLY answer
 ALTER TABLE ONLY comment
     ADD CONSTRAINT fk_userdata_id FOREIGN KEY (user_id) REFERENCES userdata(id);
 
-INSERT INTO userdata VALUES (1, 'admin', '$2b$12$K..r9Ii6Gio2b1frvcvSyeFt6Lxo0AUbqiv1eV0fvMTyJhvfaB9QW
-', '2015-05-02 16:55:00', 1000);
+INSERT INTO userdata VALUES (1, 'admin', '$2b$12$BTZSgrWkKCcnYYYCyT5QJ.Dqav2qbZPLhUOZNw3OP0tC7bffjW6be', '2015-05-02 16:55:00', 1000);
 SELECT pg_catalog.setval('userdata_id_seq', 1, true);
 
 INSERT INTO question VALUES (0, '2017-04-28 08:29:00', 29, 7, 'How to make lists in Python?', 'I am totally new to this, any hints?', NULL, 1);
