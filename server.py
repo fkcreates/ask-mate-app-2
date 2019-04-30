@@ -21,9 +21,9 @@ def get_last_5_questions_by_time():
 
 @app.route('/list')
 def list_question():
-
     user = util.get_user_name_and_id(session)
-    order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number', 'vote_number': 'Vote number', 'title': 'Title'}
+    order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number',
+                        'vote_number': 'Vote number', 'title': 'Title'}
 
     order_options = ['DESC', 'ASC']
     order_by = request.args.get('order_by')
@@ -58,7 +58,6 @@ def display_question(question_id):
 
 @app.route('/add-question', methods=["GET"])
 def route_question():
-
     user = util.get_user_name_and_id(session)
 
     return render_template("add_question.html",
@@ -82,7 +81,6 @@ def add_question():
 
 @app.route('/question/<question_id>/are-you-sure', methods=["GET"])
 def confirm_delete_question(question_id):
-
     user = util.get_user_name_and_id(session)
 
     return render_template("confirm_delete_question.html",
@@ -224,7 +222,6 @@ def delete_answer(answer_id):
 
 @app.route('/question/<question_id>/new-comment', methods=["GET"])
 def route_new_question_comment(question_id):
-
     user = util.get_user_name_and_id(session)
 
     return render_template('add_comment_for_question.html',
@@ -356,10 +353,11 @@ def edit_comment(comment_id):
                             question_id=question_id,
                             user=user))
 
+
 @app.route('/login', methods=["GET"])
 def route_user_login():
-
     return render_template('login_page.html')
+
 
 @app.route('/login', methods=["POST"])
 def user_login():
@@ -376,7 +374,7 @@ def user_login():
             session['user_id'] = user_id[0]['id']
 
             return redirect(url_for("get_last_5_questions_by_time",
-                            user_name=session['user_name']))
+                                    user_name=session['user_name']))
         else:
             message = "User name or password is incorrect"
             return render_template('login_page.html',
@@ -386,6 +384,7 @@ def user_login():
         message = "User name or password is incorrect"
         return render_template('login_page.html',
                                message=message)
+
 
 @app.route('/route_user_logout')
 def route_user_logout():
@@ -413,8 +412,8 @@ def user_registration():
 
     if len(is_username_in_database) == 1:
         return render_template('user_registration.html',
-                           title='User registration',
-                           error_message='This user name is already taken!')
+                               title='User registration',
+                               error_message='This user name is already taken!')
     else:
         data_manager.add_new_data_to_table(new_user_data, 'userdata')
         return redirect(url_for('user_login'))
@@ -425,10 +424,23 @@ def list_users():
     data = data_manager.get_users()
     return render_template("user_list.html", data=data, title="Users")
 
+
 @app.route('/user_page/<user_name>')
 def user_page(user_name):
     # user_name = request.args.get('user_name')
-    return render_template("user_page.html", user_name = user_name)
+    user_id = data_manager.get_user_id_by_name(user_name)
+    data = data_manager.get_questions_by_user_id(user_id)
+    # answers = data_manager.get_answers_by_user_id(user_id)
+    # comments = data_manager.get_comments_by_user_id(user_id)
+    return render_template("user_page.html", user_name=user_name,
+                           data=data,
+                           title="List questions",)
+                           # select_options=order_by_options,
+                           # order_options=order_options,
+                           # order_by=order_by,
+                           # order=order,
+                           # user=user
+
 
 
 if __name__ == "__main__":

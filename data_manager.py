@@ -357,3 +357,10 @@ def get_users(cursor):
                    #  'reputation': reputation})
 
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    cursor.execute("""
+                        SELECT * FROM question
+                        WHERE user_id = user_id;""",)

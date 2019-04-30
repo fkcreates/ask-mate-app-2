@@ -11,6 +11,18 @@
         <button type="submit"> Questions</button>
     </form>
     <table>
+    <thead>
+        <th>Questions</th>
+    </thead>
+ {% for row in data %}
+            <tr>
+                <td>{{ row["submission_time"] }}</td>
+                <td>{{ row["view_number"] }}</td>
+                <td>{{ row["vote_number"] }}</td>
+                <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
+
+            </tr>
+        {% endfor %}
     </table>
 
 
