@@ -2,7 +2,6 @@ import data_manager
 import util
 from flask import render_template, Flask, url_for, request, redirect
 
-
 app = Flask(__name__)
 
 
@@ -16,7 +15,8 @@ def get_last_5_questions_by_time():
 
 @app.route('/list')
 def list_question():
-    order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number', 'vote_number': 'Vote number', 'title': 'Title'}
+    order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number',
+                        'vote_number': 'Vote number', 'title': 'Title'}
     order_options = ['DESC', 'ASC']
     order_by = request.args.get('order_by')
     order = request.args.get('order')
@@ -47,7 +47,6 @@ def display_question(question_id):
 
 @app.route('/add-question', methods=["GET"])
 def route_question():
-
     return render_template("add_question.html",
                            title="Add question")
 
@@ -66,7 +65,6 @@ def add_question():
 
 @app.route('/question/<question_id>/are-you-sure', methods=["GET"])
 def confirm_delete_question(question_id):
-
     return render_template("confirm_delete_question.html",
                            question_id=question_id,
                            title="Are you sure you want to delete this question?")
@@ -81,7 +79,6 @@ def delete_question(question_id):
 
 @app.route('/question/<question_id>/new-answer', methods=["GET"])
 def route_new_answer(question_id):
-
     return render_template("new_answer.html",
                            question_id=question_id,
                            title="New answer")
@@ -158,9 +155,9 @@ def route_edit_answer(answer_id):
 def edit_answer(answer_id):
     question_id = request.args.get('question_id')
     new_answer = {'id': answer_id,
-                'question_id': question_id,
-                'message': request.form.get('message'),
-                'image': None}
+                  'question_id': question_id,
+                  'message': request.form.get('message'),
+                  'image': None}
     data_manager.update_question_answer(new_answer)
 
     return redirect(url_for("display_question",
@@ -188,7 +185,6 @@ def delete_answer(answer_id):
 
 @app.route('/question/<question_id>/new-comment', methods=["GET"])
 def route_new_question_comment(question_id):
-
     return render_template('add_comment_for_question.html',
                            question_id=question_id,
                            title='New comment')
@@ -197,9 +193,9 @@ def route_new_question_comment(question_id):
 @app.route('/question/<question_id>/new-comment', methods=["POST"])
 def add_new_question_comment(question_id):
     new_comment = {'question_id': question_id,
-                    'answer_id': None,
-                    'message': request.form.get("message"),
-                    'edited_count': 0}
+                   'answer_id': None,
+                   'message': request.form.get("message"),
+                   'edited_count': 0}
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
     return redirect(url_for("display_question",
@@ -219,11 +215,11 @@ def route_new_answer_comment(answer_id):
 def add_new_answer_comment(answer_id):
     question_id = request.args.get("question_id")
     new_comment = {
-                    'question_id': None,
-                    'answer_id': answer_id,
-                    'message': request.form.get("message"),
-                    'edited_count': 0
-                    }
+        'question_id': None,
+        'answer_id': answer_id,
+        'message': request.form.get("message"),
+        'edited_count': 0
+    }
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
     return redirect(url_for("show_answer_and_comments",
@@ -299,6 +295,17 @@ def edit_comment(comment_id):
 
     return redirect(url_for("display_question",
                             question_id=question_id))
+
+
+@app.route('/list_users')
+def list_users():
+    data = data_manager.get_users()
+    return render_template("user_list.html", data=data, title="Users")
+
+@app.route('/user_page/<user_name>')
+def user_page(user_name):
+    # user_name = request.args.get('user_name')
+    return render_template("user_page.html", user_name = user_name)
 
 
 if __name__ == "__main__":

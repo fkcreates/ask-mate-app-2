@@ -33,6 +33,7 @@ def get_answers_for_question(cursor, question_id):
     answers = cursor.fetchall()
     return answers
 
+
 @connection.connection_handler
 def get_answer_by_answer_id(cursor, answer_id):
     cursor.execute("""
@@ -91,7 +92,7 @@ def add_new_data_to_table(cursor, dict, type):
                          """,
                        {'submission_time': dt,
                         'view_number': dict['view_number'],
-                        'vote_number':dict['vote_number'],
+                        'vote_number': dict['vote_number'],
                         'title': dict['title'],
                         'message': dict['message'],
                         'image': dict['image']})
@@ -126,7 +127,7 @@ def delete_answer(cursor, answer_id):
                 DELETE FROM answer
                 WHERE id = %(answer_id)s;
                 """,
-                {'answer_id': answer_id})
+                   {'answer_id': answer_id})
 
 
 @connection.connection_handler
@@ -249,6 +250,7 @@ def get_comments_for_answer(cursor, answer_id):
     comments = cursor.fetchall()
     return comments
 
+
 @connection.connection_handler
 def get_all_comments(cursor):
     cursor.execute("""
@@ -278,6 +280,7 @@ def route_edit_comment(cursor, comment_id):
     comment_to_edit = cursor.fetchall()
     return comment_to_edit
 
+
 @connection.connection_handler
 def edit_comment(cursor, comment_id, message):
     from datetime import datetime
@@ -293,3 +296,14 @@ def edit_comment(cursor, comment_id, message):
                     'submission_time': dt})
 
 
+@connection.connection_handler
+def get_users(cursor):
+    cursor.execute("""
+                        SELECT user_name, reg_date, reputation
+                        FROM userdata;
+                        """,)
+                   # {'user_name': user_name,
+                   #  'reg_date': reg_date,
+                   #  'reputation': reputation})
+
+    return cursor.fetchall()

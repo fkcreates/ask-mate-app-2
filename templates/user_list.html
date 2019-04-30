@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>User Name</th>
+            <th>Registered</th>
+            <th>Reputation</th>
+        </tr>
+        {% for row in data %}
+            <tr>
+                <td><a href="{{ url_for('user_page', user_name=row["user_name"]) }}"> {{ row["user_name"] }} </a></td>
+                <td>{{ row["reg_date"] }}</td>
+                <td>{{ row["reputation"] }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+{% endblock %}
