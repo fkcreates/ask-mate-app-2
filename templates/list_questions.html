@@ -7,6 +7,7 @@
 {% block content %}
     {% if user == None %}
         <button><a href="{{ url_for("route_user_login") }}">Login</a></button>
+        <button><a href="{{ url_for('route_user_registration') }}">Register</a></button>
     {% else %}
         <button><a href="{{ url_for("route_user_logout") }}">Logout</a></button>
     {% endif %}
@@ -39,9 +40,7 @@
         </form>
     </p>
     {% elif title == 'Main page'%}
-        <p>
-            <button><a href="{{ url_for('route_user_registration') }}">Register</a></button>
-        </p>
+
         <p>
             <a href="{{ url_for('route_question') }}">Add new question</a>
         </p>
