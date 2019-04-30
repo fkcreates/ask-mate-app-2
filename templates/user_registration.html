@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <form action="{{ url_for('user_registration') }}" method="POST">
+        <p>User name<br>
+        <input type="text" name="user_name" required size="50">
+        </p>
+
+        <p>Password<br>
+        <input type="text" name="password" required size="50">
+        </p>
+        <br>
+        <button type="submit">Regist!</button>
+    </form>
+
+    <p><a href="{{ url_for("get_last_5_questions_by_time") }}">Go back to main page</a></p>
+    </form>
+{% endblock %}
