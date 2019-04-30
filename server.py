@@ -11,9 +11,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 @app.route('/')
 def get_last_5_questions_by_time():
     questions = data_manager.get_last_five_question_by_time()
-    user = None
-    if 'user_id' in session:
-        user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     return render_template("list_questions.html",
                            data=questions,
                            title="Main page",
@@ -22,7 +20,8 @@ def get_last_5_questions_by_time():
 
 @app.route('/list')
 def list_question():
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
+
     order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number', 'vote_number': 'Vote number', 'title': 'Title'}
     order_options = ['DESC', 'ASC']
     order_by = request.args.get('order_by')
@@ -44,7 +43,7 @@ def display_question(question_id):
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
     data_manager.increase_view_number(question_id)
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
 
     return render_template("display_question.html",
                            question_id=question_id,
@@ -57,7 +56,7 @@ def display_question(question_id):
 
 @app.route('/add-question', methods=["GET"])
 def route_question():
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     return render_template("add_question.html",
                            title="Add question",
                            user=user)
@@ -65,7 +64,7 @@ def route_question():
 
 @app.route('/add_question', methods=["POST"])
 def add_question():
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     new_question = {"view_number": 0,
                     "vote_number": 0,
                     "title": request.form.get("title"),
@@ -79,7 +78,7 @@ def add_question():
 
 @app.route('/question/<question_id>/are-you-sure', methods=["GET"])
 def confirm_delete_question(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     return render_template("confirm_delete_question.html",
                            question_id=question_id,
                            title="Are you sure you want to delete this question?",
@@ -95,7 +94,7 @@ def delete_question(question_id):
 
 @app.route('/question/<question_id>/new-answer', methods=["GET"])
 def route_new_answer(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
 
     return render_template("new_answer.html",
                            question_id=question_id,
@@ -105,7 +104,7 @@ def route_new_answer(question_id):
 
 @app.route('/question/<question_id>/new-answer', methods=["POST"])
 def post_answer(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     new_answer = {'vote_number': 0,
                   'question_id': question_id,
                   'message': request.form.get('message'),
@@ -119,7 +118,7 @@ def post_answer(question_id):
 
 @app.route('/question/<int:question_id>/edit', methods=["GET"])
 def route_edit_question(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_to_edit = data_manager.route_edit_question(question_id)
 
     return render_template("edit_question.html",
@@ -131,7 +130,7 @@ def route_edit_question(question_id):
 
 @app.route('/question/<question_id>/edit', methods=["POST"])
 def edit_question(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     edited_title = request.form['title']
     edited_message = request.form['message']
     data_manager.edit_question(question_id, edited_title, edited_message)
@@ -167,7 +166,7 @@ def vote_for_answer(answer_id):
 
 @app.route('/answer/<answer_id>/edit', methods=["GET"])
 def route_edit_answer(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get('question_id')
     answers = data_manager.get_answer_for_question_by_id(answer_id, question_id)
 
@@ -181,7 +180,7 @@ def route_edit_answer(answer_id):
 
 @app.route('/answer/<answer_id>/edit', methods=["POST"])
 def edit_answer(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get('question_id')
     new_answer = {'id': answer_id,
                 'question_id': question_id,
@@ -196,7 +195,7 @@ def edit_answer(answer_id):
 
 @app.route('/answer/<int:answer_id>/are-you-sure', methods=["GET"])
 def confirm_delete_answer(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
 
     return render_template("confirm_delete_answer.html",
@@ -208,7 +207,7 @@ def confirm_delete_answer(answer_id):
 
 @app.route('/answer/<int:answer_id>/delete', methods=["GET", "POST"])
 def delete_answer(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     data_manager.delete_answer(answer_id)
 
@@ -219,7 +218,7 @@ def delete_answer(answer_id):
 
 @app.route('/question/<question_id>/new-comment', methods=["GET"])
 def route_new_question_comment(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     return render_template('add_comment_for_question.html',
                            question_id=question_id,
                            title='New comment',
@@ -228,7 +227,7 @@ def route_new_question_comment(question_id):
 
 @app.route('/question/<question_id>/new-comment', methods=["POST"])
 def add_new_question_comment(question_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     new_comment = {'question_id': question_id,
                     'answer_id': None,
                     'message': request.form.get("message"),
@@ -242,7 +241,7 @@ def add_new_question_comment(question_id):
 
 @app.route('/answer/<answer_id>/new-comment', methods=["GET"])
 def route_new_answer_comment(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     return render_template('add_comment_for_answer.html',
                            answer_id=answer_id,
@@ -253,7 +252,7 @@ def route_new_answer_comment(answer_id):
 
 @app.route('/answer/<int:answer_id>/new-comment', methods=["POST"])
 def add_new_answer_comment(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     new_comment = {
                     'question_id': None,
@@ -271,7 +270,7 @@ def add_new_answer_comment(answer_id):
 
 @app.route('/question/show-answer/<int:answer_id>', methods=["GET"])
 def show_answer_and_comments(answer_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     answer = data_manager.get_answer_by_answer_id(answer_id)
     comments_for_answer = data_manager.get_comments_for_answer(answer_id)
@@ -287,7 +286,7 @@ def show_answer_and_comments(answer_id):
 
 @app.route('/comments/<int:comment_id>/are-you-sure', methods=["GET"])
 def confirm_delete_comment(comment_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     answer_id = request.args.get("answer_id")
 
@@ -301,7 +300,7 @@ def confirm_delete_comment(comment_id):
 
 @app.route('/comments/<int:comment_id>/delete', methods=["GET", "POST"])
 def delete_comment(comment_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     answer_id = request.args.get("answer_id")
     comments = data_manager.get_all_comments()
@@ -325,7 +324,7 @@ def delete_comment(comment_id):
 
 @app.route('/comments/<comment_id>/edit', methods=["GET"])
 def route_edit_comment(comment_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     comment_to_edit = data_manager.route_edit_comment(comment_id)
 
@@ -339,7 +338,7 @@ def route_edit_comment(comment_id):
 
 @app.route('/comments/<comment_id>/edit', methods=["POST"])
 def edit_comment(comment_id):
-    user = util.get_user_name_and_id(session)
+    user = util.check_if_logged_in()
     question_id = request.args.get("question_id")
     updated_comment = request.form.get("message")
 
