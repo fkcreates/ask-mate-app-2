@@ -33,3 +33,13 @@ def order_questions(order_by, order):
         order = 'DESC'
         questions = data_manager.list_questions(order_by, order)
     return questions
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+def get_user_name_and_id(session):
+    return {
+        'user_name': session['user_name'],
+        'user_id': session['user_id']
+    }

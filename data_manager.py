@@ -86,15 +86,17 @@ def add_new_data_to_table(cursor, dict, type):
 
     if type == "question":
         cursor.execute("""
-                        INSERT INTO question(submission_time, view_number, vote_number, title, message, image)
-                        VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);
+                        INSERT INTO question(submission_time, view_number, vote_number, title, message, image, user_id)
+                        VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s, %(user_id)s);
                          """,
                        {'submission_time': dt,
                         'view_number': dict['view_number'],
                         'vote_number':dict['vote_number'],
                         'title': dict['title'],
                         'message': dict['message'],
-                        'image': dict['image']})
+                        'image': dict['image'],
+                        'user_id': dict['user_id']})
+
     elif type == "answer":
         cursor.execute("""
                         INSERT INTO answer(submission_time, vote_number, question_id, message, image)
@@ -302,6 +304,33 @@ def edit_comment(cursor, comment_id, message):
                     'message': message,
                     'submission_time': dt})
 
+@connection.connection_handler
+def get_hashed_pw(cursor, user_name):
+    cursor.execute("""
+                    SELECT hashed_pw from userdata
+                    WHERE user_name = %(user_name)s;
+                    """,
+                   {'user_name': user_name})
+
+    hashed_pw = cursor.fetchall()
+
+    if len(hashed_pw) > 0:
+        return hashed_pw[0]
+    else:
+        return None
+
+
+@connection.connection_handler
+def get_user_id_by_name(cursor, user_name):
+    cursor.execute("""
+                    SELECT id FROM userdata
+                    WHERE user_name = %(user_name)s
+                    """,
+                   {'user_name': user_name});
+
+    user_id = cursor.fetchall()
+    return user_id
+
 
 @connection.connection_handler
 def check_if_username_in_the_database(cursor, user_name):
@@ -313,4 +342,5 @@ def check_if_username_in_the_database(cursor, user_name):
                    {'user_name': user_name})
     check_data = cursor.fetchall()
     return check_data
+
 
