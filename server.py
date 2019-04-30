@@ -22,6 +22,7 @@ def get_last_5_questions_by_time():
 
 @app.route('/list')
 def list_question():
+    user = util.get_user_name_and_id(session)
     order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number', 'vote_number': 'Vote number', 'title': 'Title'}
     order_options = ['DESC', 'ASC']
     order_by = request.args.get('order_by')
@@ -33,7 +34,8 @@ def list_question():
                            select_options=order_by_options,
                            order_options=order_options,
                            order_by=order_by,
-                           order=order)
+                           order=order,
+                           user=user)
 
 
 @app.route('/question/<int:question_id>')
@@ -55,8 +57,10 @@ def display_question(question_id):
 
 @app.route('/add-question', methods=["GET"])
 def route_question():
+    user = util.get_user_name_and_id(session)
     return render_template("add_question.html",
-                           title="Add question")
+                           title="Add question",
+                           user=user)
 
 
 @app.route('/add_question', methods=["POST"])
@@ -75,10 +79,11 @@ def add_question():
 
 @app.route('/question/<question_id>/are-you-sure', methods=["GET"])
 def confirm_delete_question(question_id):
-
+    user = util.get_user_name_and_id(session)
     return render_template("confirm_delete_question.html",
                            question_id=question_id,
-                           title="Are you sure you want to delete this question?")
+                           title="Are you sure you want to delete this question?",
+                           user=user)
 
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
@@ -90,41 +95,50 @@ def delete_question(question_id):
 
 @app.route('/question/<question_id>/new-answer', methods=["GET"])
 def route_new_answer(question_id):
+    user = util.get_user_name_and_id(session)
 
     return render_template("new_answer.html",
                            question_id=question_id,
-                           title="New answer")
+                           title="New answer",
+                           user=user)
 
 
 @app.route('/question/<question_id>/new-answer', methods=["POST"])
 def post_answer(question_id):
+    user = util.get_user_name_and_id(session)
     new_answer = {'vote_number': 0,
                   'question_id': question_id,
                   'message': request.form.get('message'),
                   'image': None}
     data_manager.add_new_data_to_table(new_answer, 'answer')
 
-    return redirect(url_for("display_question", question_id=question_id))
+    return redirect(url_for("display_question",
+                            question_id=question_id,
+                            user=user))
 
 
 @app.route('/question/<int:question_id>/edit', methods=["GET"])
 def route_edit_question(question_id):
+    user = util.get_user_name_and_id(session)
     question_to_edit = data_manager.route_edit_question(question_id)
 
     return render_template("edit_question.html",
                            title="Edit question",
                            question=question_to_edit,
-                           question_id=question_id)
+                           question_id=question_id,
+                           user=user)
 
 
 @app.route('/question/<question_id>/edit', methods=["POST"])
 def edit_question(question_id):
+    user = util.get_user_name_and_id(session)
     edited_title = request.form['title']
     edited_message = request.form['message']
     data_manager.edit_question(question_id, edited_title, edited_message)
 
     return redirect(url_for("display_question",
-                            question_id=question_id))
+                            question_id=question_id,
+                            user=user))
 
 
 @app.route('/question/<int:question_id>/vote')
@@ -153,6 +167,7 @@ def vote_for_answer(answer_id):
 
 @app.route('/answer/<answer_id>/edit', methods=["GET"])
 def route_edit_answer(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get('question_id')
     answers = data_manager.get_answer_for_question_by_id(answer_id, question_id)
 
@@ -160,11 +175,13 @@ def route_edit_answer(answer_id):
                            answers=answers,
                            answer_id=answer_id,
                            question_id=question_id,
-                           title="Edit answer")
+                           title="Edit answer",
+                           user=user)
 
 
 @app.route('/answer/<answer_id>/edit', methods=["POST"])
 def edit_answer(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get('question_id')
     new_answer = {'id': answer_id,
                 'question_id': question_id,
@@ -173,38 +190,45 @@ def edit_answer(answer_id):
     data_manager.update_question_answer(new_answer)
 
     return redirect(url_for("display_question",
-                            question_id=question_id))
+                            question_id=question_id,
+                            user=user))
 
 
 @app.route('/answer/<int:answer_id>/are-you-sure', methods=["GET"])
 def confirm_delete_answer(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
 
     return render_template("confirm_delete_answer.html",
                            answer_id=answer_id,
                            question_id=question_id,
-                           title="Are you sure you want to delete this answer?")
+                           title="Are you sure you want to delete this answer?",
+                           user=user)
 
 
 @app.route('/answer/<int:answer_id>/delete', methods=["GET", "POST"])
 def delete_answer(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     data_manager.delete_answer(answer_id)
 
     return redirect(url_for("display_question",
-                            question_id=question_id))
+                            question_id=question_id,
+                            user=user))
 
 
 @app.route('/question/<question_id>/new-comment', methods=["GET"])
 def route_new_question_comment(question_id):
-
+    user = util.get_user_name_and_id(session)
     return render_template('add_comment_for_question.html',
                            question_id=question_id,
-                           title='New comment')
+                           title='New comment',
+                           user=user)
 
 
 @app.route('/question/<question_id>/new-comment', methods=["POST"])
 def add_new_question_comment(question_id):
+    user = util.get_user_name_and_id(session)
     new_comment = {'question_id': question_id,
                     'answer_id': None,
                     'message': request.form.get("message"),
@@ -212,20 +236,24 @@ def add_new_question_comment(question_id):
     data_manager.add_new_data_to_table(new_comment, 'comment')
 
     return redirect(url_for("display_question",
-                            question_id=question_id))
+                            question_id=question_id,
+                            user=user))
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=["GET"])
 def route_new_answer_comment(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     return render_template('add_comment_for_answer.html',
                            answer_id=answer_id,
                            question_id=question_id,
-                           title='New comment')
+                           title='New comment',
+                           user=user)
 
 
 @app.route('/answer/<int:answer_id>/new-comment', methods=["POST"])
 def add_new_answer_comment(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     new_comment = {
                     'question_id': None,
@@ -237,11 +265,13 @@ def add_new_answer_comment(answer_id):
 
     return redirect(url_for("show_answer_and_comments",
                             answer_id=answer_id,
-                            question_id=question_id))
+                            question_id=question_id,
+                            user=user))
 
 
 @app.route('/question/show-answer/<int:answer_id>', methods=["GET"])
 def show_answer_and_comments(answer_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     answer = data_manager.get_answer_by_answer_id(answer_id)
     comments_for_answer = data_manager.get_comments_for_answer(answer_id)
@@ -251,11 +281,13 @@ def show_answer_and_comments(answer_id):
                            answer=answer,
                            answer_id=answer_id,
                            question_id=question_id,
-                           title="Answer and comments")
+                           title="Answer and comments",
+                           user=user)
 
 
 @app.route('/comments/<int:comment_id>/are-you-sure', methods=["GET"])
 def confirm_delete_comment(comment_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     answer_id = request.args.get("answer_id")
 
@@ -263,11 +295,13 @@ def confirm_delete_comment(comment_id):
                            comment_id=comment_id,
                            question_id=question_id,
                            answer_id=answer_id,
-                           title="Are you sure you want to delete this comment?")
+                           title="Are you sure you want to delete this comment?",
+                           user=user)
 
 
 @app.route('/comments/<int:comment_id>/delete', methods=["GET", "POST"])
 def delete_comment(comment_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     answer_id = request.args.get("answer_id")
     comments = data_manager.get_all_comments()
@@ -280,15 +314,18 @@ def delete_comment(comment_id):
 
     if decision == "question":
         return redirect(url_for("display_question",
-                                question_id=question_id))
+                                question_id=question_id,
+                                user=user))
     elif decision == "answer":
         return redirect(url_for("show_answer_and_comments",
                                 answer_id=answer_id,
-                                question_id=question_id))
+                                question_id=question_id,
+                                user=user))
 
 
 @app.route('/comments/<comment_id>/edit', methods=["GET"])
 def route_edit_comment(comment_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     comment_to_edit = data_manager.route_edit_comment(comment_id)
 
@@ -296,18 +333,21 @@ def route_edit_comment(comment_id):
                            comment_id=comment_id,
                            comment=comment_to_edit,
                            question_id=question_id,
-                           title="Edit comment")
+                           title="Edit comment",
+                           user=user)
 
 
 @app.route('/comments/<comment_id>/edit', methods=["POST"])
 def edit_comment(comment_id):
+    user = util.get_user_name_and_id(session)
     question_id = request.args.get("question_id")
     updated_comment = request.form.get("message")
 
     data_manager.edit_comment(comment_id, updated_comment)
 
     return redirect(url_for("display_question",
-                            question_id=question_id))
+                            question_id=question_id,
+                            user=user))
 
 @app.route('/login', methods=["GET"])
 def route_user_login():
