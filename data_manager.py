@@ -287,6 +287,7 @@ def route_edit_comment(cursor, comment_id):
     comment_to_edit = cursor.fetchall()
     return comment_to_edit
 
+
 @connection.connection_handler
 def edit_comment(cursor, comment_id, message):
     from datetime import datetime
@@ -301,4 +302,15 @@ def edit_comment(cursor, comment_id, message):
                     'message': message,
                     'submission_time': dt})
 
+
+@connection.connection_handler
+def check_if_username_in_the_database(cursor, user_name):
+    cursor.execute("""
+                    SELECT user_name FROM userdata
+                    WHERE user_name = %(user_name)s;
+                    ;
+                    """,
+                   {'user_name': user_name})
+    check_data = cursor.fetchall()
+    return check_data
 
