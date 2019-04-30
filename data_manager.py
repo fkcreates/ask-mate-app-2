@@ -292,4 +292,17 @@ def edit_comment(cursor, comment_id, message):
                     'message': message,
                     'submission_time': dt})
 
+@connection.connection_handler
+def get_hashed_pw(cursor, user_name):
+    cursor.execute("""
+                    SELECT hashed_pw from userdata
+                    WHERE user_name = %(user_name)s;
+                    """,
+                   {'user_name': user_name})
 
+    hashed_pw = cursor.fetchall()
+
+    if len(hashed_pw) > 0:
+        return hashed_pw[0]
+    else:
+        return None

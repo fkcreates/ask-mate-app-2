@@ -305,7 +305,25 @@ def route_user_login():
 
     return render_template('login_page.html')
 
+@app.route('/login', methods=["POST"])
+def user_login():
+    user_name = request.form.get("user_name")
+    password = request.form.get("password")
+    hashed_pw = data_manager.get_hashed_pw(user_name)
 
+    if hashed_pw:
+        verification = util.verify_password(password, hashed_pw['hashed_pw'])
+
+        if verification:
+            return redirect(url_for("get_last_5_questions_by_time"))
+        else:
+            message = "User name or password is incorrect"
+            return render_template('login_page.html',
+                                   message=message)
+    elif hashed_pw == None:
+        message = "User name or password is incorrect"
+        return render_template('login_page.html',
+                               message=message)
 
 
 if __name__ == "__main__":
