@@ -300,6 +300,13 @@ def edit_comment(comment_id):
     return redirect(url_for("display_question",
                             question_id=question_id))
 
+@app.route('/login', methods=["GET"])
+def route_user_login():
+
+    return render_template('login_page.html')
+
+
+
 
 if __name__ == "__main__":
     app.run(

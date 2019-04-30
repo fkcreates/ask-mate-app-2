@@ -1,4 +1,5 @@
 import data_manager
+from datetime import datetime
 
 
 def vote_up_or_down(vote_number, vote_type):
