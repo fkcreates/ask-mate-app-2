@@ -347,9 +347,36 @@ def route_user_logout():
     return redirect(url_for("get_last_5_questions_by_time"))
 
 
+@app.route('/registration')
+def route_user_registration():
+    return render_template('user_registration.html',
+                           title='User registration')
+
+
+@app.route('/registration', methods=['POST'])
+def user_registration():
+    hashed_password = util.hash_password(request.form.get('password'))
+
+    new_user_data = {
+        'user_name': request.form.get('user_name'),
+        'hashed_pw': hashed_password,
+    }
+
+    is_username_in_database = data_manager.check_if_username_in_the_database(new_user_data['user_name'])
+
+    if len(is_username_in_database) == 1:
+        return render_template('user_registration.html',
+                           title='User registration',
+                           error_message='This user name is already taken!')
+    else:
+        data_manager.add_new_data_to_table(new_user_data, 'userdata')
+        return redirect(url_for('get_last_5_questions_by_time'))
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=8000,
         debug=True
     )
+pass

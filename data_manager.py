@@ -118,6 +118,15 @@ def add_new_data_to_table(cursor, dict, type):
                         'message': dict['message'],
                         'submission_time': dt,
                         'edited_count': dict['edited_count']})
+    elif type == "userdata":
+        cursor.execute("""
+                        INSERT INTO userdata(user_name, hashed_pw, reg_date, reputation)
+                        VALUES(%(user_name)s, %(hashed_pw)s, %(reg_date)s, %(reputation)s);
+                        """,
+                       {'user_name': dict['user_name'],
+                        'hashed_pw': dict['hashed_pw'],
+                        'reg_date': dt,
+                        'reputation': 0})
 
 
 @connection.connection_handler
@@ -280,6 +289,7 @@ def route_edit_comment(cursor, comment_id):
     comment_to_edit = cursor.fetchall()
     return comment_to_edit
 
+
 @connection.connection_handler
 def edit_comment(cursor, comment_id, message):
     from datetime import datetime
@@ -320,3 +330,17 @@ def get_user_id_by_name(cursor, user_name):
 
     user_id = cursor.fetchall()
     return user_id
+
+
+@connection.connection_handler
+def check_if_username_in_the_database(cursor, user_name):
+    cursor.execute("""
+                    SELECT user_name FROM userdata
+                    WHERE user_name = %(user_name)s;
+                    ;
+                    """,
+                   {'user_name': user_name})
+    check_data = cursor.fetchall()
+    return check_data
+
+

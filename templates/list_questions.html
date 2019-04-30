@@ -12,8 +12,11 @@
     {% endif %}
 
 <h1>{{ title }}</h1>
-    <p><a href="{{ url_for('route_question') }}">Add new question</a></p>
+
     {% if title == "List questions" %}
+    <p>
+        <a href="{{ url_for('route_question') }}">Add new question</a>
+    </p>
     <p>
         <form action="{{ url_for('list_question', order_by=order_by, order=order) }}" method="GET">
             <label for="order_by">Sort questions by: </label>
@@ -35,6 +38,13 @@
             </p>
         </form>
     </p>
+    {% elif title == 'Main page'%}
+        <p>
+            <button><a href="{{ url_for('route_user_registration') }}">Register</a></button>
+        </p>
+        <p>
+            <a href="{{ url_for('route_question') }}">Add new question</a>
+        </p>
     {% endif %}
 <table>
     <thead>
