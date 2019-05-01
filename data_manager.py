@@ -45,17 +45,6 @@ def get_answer_by_answer_id(cursor, answer_id):
     answer = cursor.fetchall()
     return answer
 
-@connection.connection_handler
-def question_by_answer_id(cursor, answer_id):
-    cursor.execute("""
-                    SELECT * FROM answer
-                    WHERE id = %(answer_id)s;
-                    """,
-                   {'answer_id': answer_id})
-
-    question_id = cursor.fetchone()['question_id']
-    return display_question(question_id)
-
 
 @connection.connection_handler
 def route_edit_question(cursor, question_id):
@@ -367,9 +356,6 @@ def get_users(cursor):
                         SELECT user_name, reg_date, reputation
                         FROM userdata;
                         """, )
-    # {'user_name': user_name,
-    #  'reg_date': reg_date,
-    #  'reputation': reputation})
 
     return cursor.fetchall()
 
