@@ -306,6 +306,7 @@ def edit_comment(cursor, comment_id, message):
                     'message': message,
                     'submission_time': dt})
 
+
 @connection.connection_handler
 def get_hashed_pw(cursor, user_name):
     cursor.execute("""
@@ -330,6 +331,7 @@ def get_user_id_by_name(cursor, user_name):
                     """,
                    {'user_name': user_name});
 
+    # user_id = cursor.fetchone()['id']
     user_id = cursor.fetchall()
     return user_id
 
@@ -351,16 +353,35 @@ def get_users(cursor):
     cursor.execute("""
                         SELECT user_name, reg_date, reputation
                         FROM userdata;
-                        """,)
-                   # {'user_name': user_name,
-                   #  'reg_date': reg_date,
-                   #  'reputation': reputation})
+                        """, )
+    # {'user_name': user_name,
+    #  'reg_date': reg_date,
+    #  'reputation': reputation})
 
     return cursor.fetchall()
 
 
 @connection.connection_handler
-def get_questions_by_user_id(cursor, user_id):
-    cursor.execute("""
+def get_data_by_user_id(cursor, user_id, type):
+    if type == 'question':
+        cursor.execute("""
                         SELECT * FROM question
-                        WHERE user_id = user_id;""",)
+                        WHERE user_id = %(user_id)s;
+                        """,
+                       {'user_id': user_id})
+        data = cursor.fetchall()
+        return data
+    if type == 'answer':
+        cursor.execute("""
+                        SELECT * FROM answer
+                        WHERE user_id = %(user_id)s;""",
+                       {'user_id': user_id})
+        data = cursor.fetchall()
+        return data
+    if type == 'comment':
+        cursor.execute("""
+                        SELECT * FROM comment
+                        WHERE user_id = %(user_id)s;""",
+                       {'user_id': user_id})
+        data = cursor.fetchall()
+        return data

@@ -428,12 +428,13 @@ def list_users():
 @app.route('/user_page/<user_name>')
 def user_page(user_name):
     # user_name = request.args.get('user_name')
-    user_id = data_manager.get_user_id_by_name(user_name)
-    data = data_manager.get_questions_by_user_id(user_id)
-    # answers = data_manager.get_answers_by_user_id(user_id)
-    # comments = data_manager.get_comments_by_user_id(user_id)
+    user_row = data_manager.get_user_id_by_name(user_name)
+    user_id = user_row[0]['id']
+    questions = data_manager.get_data_by_user_id(user_id, 'question')
+    # answers = data_manager.get_data_by_user_id(user_id, answer)
+    # comments = data_manager.get_data_by_user_id(user_id, comment)
     return render_template("user_page.html", user_name=user_name,
-                           data=data,
+                           questions=questions,
                            title="List questions",)
                            # select_options=order_by_options,
                            # order_options=order_options,
