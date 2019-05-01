@@ -44,18 +44,21 @@
         </thead>
         {% for row in comments %}
             <tr>
+                <td>{{ row["submission_time"] }}</td>
                 {% if row['question_id'] %}
-                    <td>{{ row["submission_time"] }}</td>
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }}</a>
                     </td>
                 {% else %}
-                    <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }} </a>
+                    <td>
+                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }}</a>
+                    </td>
                 {% endif %}
             </tr>
         {% endfor %}
     </table>
-
+    <p><a href="{{ url_for("list_users") }}">Go back to user list</a></p>
+    <p><a href="{{ url_for("get_last_5_questions_by_time") }}">Go back to main page</a></p>
 
 
 {% endblock %}
