@@ -5,11 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2>NAME:</h2>
-    <h3>{{ user_name }}</h3>
-    <form>
-        <button type="submit"> Questions</button>
-    </form>
+    <h3>Questions, answers and comments by {{ user_name }}</h3>
     <table>
         <thead>
         <th>Questions</th>
@@ -17,34 +13,45 @@
         {% for row in questions %}
             <tr>
                 <td>{{ row["submission_time"] }}</td>
-                <td>{{ row["view_number"] }}</td>
-                <td>{{ row["vote_number"] }}</td>
                 <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
 
             </tr>
         {% endfor %}
     </table>
-        <table>
+    <table>
         <thead>
         <th>Answers</th>
         </thead>
-            {% for row in answers %}
+        {% for row in answers %}
             <tr>
-                <td>{{ row["message"] }}</td>
-                <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
-
+                <td>{{ row["submission_time"] }}</td>
+                {% if row['question_id']  %}
+                    <td>
+                        <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }} </a>
+                    </td>
+                {% else %}
+                    <td>
+                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }} </a>
+                    </td>
+                {% endif %}
+                <td> {{ row['question_id'] }}</td>
             </tr>
         {% endfor %}
     </table>
-        <table>
+    <table>
         <thead>
         <th>Comments</th>
         </thead>
         {% for row in comments %}
             <tr>
-                <td>{{ row["message"] }}</td>
-                <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
-
+                {% if row['question_id'] %}
+                    <td>{{ row["submission_time"] }}</td>
+                    <td>
+                        <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }}</a>
+                    </td>
+                {% else %}
+                    <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }} </a>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>

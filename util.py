@@ -1,5 +1,6 @@
 import data_manager
 import bcrypt
+from flask import session
 
 
 def hash_password(plain_text_password):
@@ -43,3 +44,9 @@ def get_user_name_and_id(session):
         'user_name': session['user_name'],
         'user_id': session['user_id']
     }
+
+def check_if_logged_in():
+    user = None
+    if 'user_id' in session:
+        user = get_user_name_and_id(session)
+    return user
