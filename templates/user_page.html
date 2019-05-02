@@ -5,9 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Questions, answers and comments by {{ user_name }}</h3>
+    <h1>Questions, answers and comments by {{ user_name }}</h1>
+    <h3>Questions</h3>
     <table>
         <thead>
+        <th>Submission time</th>
         <th>Questions</th>
         </thead>
         {% for row in questions %}
@@ -18,8 +20,10 @@
             </tr>
         {% endfor %}
     </table>
+    <h3>Answers</h3>
     <table>
         <thead>
+        <th>Submission time</th>
         <th>Answers</th>
         </thead>
         {% for row in answers %}
@@ -29,15 +33,14 @@
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }} </a>
                     </td>
-
-
                 {% endif %}
-                <td> {{ row['question_id'] }}</td>
             </tr>
         {% endfor %}
     </table>
+    <h3>Comments</h3>
     <table>
         <thead>
+        <th>Submission time</th>
         <th>Comments</th>
         </thead>
         {% for row in comments %}

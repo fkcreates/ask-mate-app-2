@@ -129,6 +129,7 @@ ALTER TABLE ONLY comment
 
 INSERT INTO userdata VALUES (1, 'admin', '$2b$12$BTZSgrWkKCcnYYYCyT5QJ.Dqav2qbZPLhUOZNw3OP0tC7bffjW6be', '2015-05-02 16:55:00', 1000);
 INSERT INTO userdata VALUES (2, 'kiscica', '$2b$12$m4wLDEQEg163XJUkhGk3BOpdKOMQsBYtgatRAqMZSJ3kHBP28C24C', '2015-05-02 16:55:00', 250);
+INSERT INTO userdata VALUES (3, 'mln', '$2b$12$uh/01nzHCWWgLs.tYfCFzOEHYFU6EfZnd3vk18EOJ7oo2Jw2Z8NBe', '2015-05-02 16:55:00', 2500);
 SELECT pg_catalog.setval('userdata_id_seq', 1, true);
 
 INSERT INTO question VALUES (0, '2017-04-28 08:29:00', 29, 7, 'How to make lists in Python?', 'I am totally new to this, any hints?', NULL, 1);
@@ -142,15 +143,18 @@ jquery
 booklet
 app.js (bundled file with webpack, including jquery)', 'images/image1.png', 1);
 INSERT INTO question VALUES (2, '2017-05-01 10:41:00', 1364, 57, 'Drawing canvas with an image picked with Cordova Camera Plugin', 'I''m getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I''m on IOS, it throws errors such as cross origin issue, or that I''m trying to use an unknown format.
-', NULL, 1);
+', NULL, 2);
+INSERT INTO question VALUES (3, '2018-05-01 10:41:00', 144, 14, 'What is the meaning of life?', 'I really want to know', NULL, 2);
 SELECT pg_catalog.setval('question_id_seq', 2, true);
 
 INSERT INTO answer VALUES (1, '2017-04-28 16:49:00', 4, 1, 'You need to use brackets: my_list = []', NULL, 1, 'no');
 INSERT INTO answer VALUES (2, '2017-04-25 14:42:00', 35, 1, 'Look it up in the Python docs', 'images/image2.jpg', 1, 'no');
+INSERT INTO answer VALUES (3, '2018-03-15 13:12:00', 12, 2, 'No clue man', 'images/image2.jpg', 2, 'no');
 SELECT pg_catalog.setval('answer_id_seq', 2, true);
 
 INSERT INTO comment VALUES (1, 1, NULL, 'Please clarify the question as it is too vague!', '2017-05-01 05:49:00', NULL, 1);
 INSERT INTO comment VALUES (2, NULL, 1, 'I think you could use my_list = list() as well.', '2017-05-02 16:55:00', NULL, 1);
+INSERT INTO comment VALUES (3, 3, NULL, 'There is no correct answer', '2017-05-02 16:55:00', NULL, 2);
 SELECT pg_catalog.setval('comment_id_seq', 2, true);
 
 INSERT INTO tag VALUES (1, 'python');
