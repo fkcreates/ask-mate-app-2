@@ -19,8 +19,6 @@ def get_last_5_questions_by_time():
 
 @app.route('/list')
 def list_question():
-
-
     user = util.check_if_logged_in()
 
     order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number',
@@ -59,7 +57,8 @@ def display_question(question_id):
 @app.route('/get_question_by_answer_id')
 def get_question_by_answer_id(answer_id):
     question_id = data_manager.question_by_answer_id(answer_id)
-    display_question(question_id)
+    redirect(url_for('display_question', question_id=question_id))
+
 
 @app.route('/add-question', methods=["GET"])
 def route_question():
@@ -87,8 +86,6 @@ def add_question():
 
 @app.route('/question/<question_id>/are-you-sure', methods=["GET"])
 def confirm_delete_question(question_id):
-
-
     user = util.check_if_logged_in()
 
     return render_template("confirm_delete_question.html",
@@ -232,8 +229,6 @@ def delete_answer(answer_id):
 
 @app.route('/question/<question_id>/new-comment', methods=["GET"])
 def route_new_question_comment(question_id):
-
-
     user = util.check_if_logged_in()
     return render_template('add_comment_for_question.html',
                            question_id=question_id,

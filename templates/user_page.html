@@ -25,13 +25,9 @@
         {% for row in answers %}
             <tr>
                 <td>{{ row["submission_time"] }}</td>
-                {% if row['question_id']  %}
+                {% if row['question_id'] %}
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }} </a>
-                    </td>
-                {% elif row['answer_id'] %}
-                    <td>
-                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }} </a>
                     </td>
                 {% endif %}
                 <td> {{ row['question_id'] }}</td>
@@ -49,10 +45,12 @@
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }}</a>
                     </td>
-                {% else %}
+                {% elif row['answer_id'] %}
                     <td>
                         <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }}</a>
                     </td>
+                {% else %}
+                    <td>non of the ifs</td>
                 {% endif %}
             </tr>
         {% endfor %}
