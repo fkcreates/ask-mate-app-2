@@ -35,9 +35,11 @@ def order_questions(order_by, order):
         questions = data_manager.list_questions(order_by, order)
     return questions
 
+
 def verify_password(plain_text_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
 
 def get_user_name_and_id(session):
     return {
@@ -45,8 +47,36 @@ def get_user_name_and_id(session):
         'user_id': session['user_id']
     }
 
+
 def check_if_logged_in():
     user = None
     if 'user_id' in session:
         user = get_user_name_and_id(session)
     return user
+
+
+def get_all_user_activities(user_name):
+    user_row = data_manager.get_user_id_by_name(user_name)
+    user_id = user_row[0]['id']
+    questions = data_manager.get_data_by_user_id(user_id, 'question')
+    answers = data_manager.get_data_by_user_id(user_id, 'answer')
+    comments = data_manager.get_data_by_user_id(user_id, 'comment')
+    return {'questions': questions,
+            'answers': answers,
+            'comments': comments,
+            }
+
+
+def get_number_of_user_activities(user_name):
+    user_row = data_manager.get_user_id_by_name(user_name)
+    user_id = user_row[0]['id']
+    data = get_number_of_user_activities_by_id(user_id)
+    return data
+
+
+def get_number_of_user_activities_by_id(user_id):
+    data = {}
+    data.update(dict(user_id=len(data_manager.get_data_by_user_id(user_id, 'question'))))
+    data.update(dict(user_id=len(data_manager.get_data_by_user_id(user_id, 'answer'))))
+    data.update(dict(user_id=len(data_manager.get_data_by_user_id(user_id, 'comment'))))
+    return data
