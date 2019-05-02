@@ -412,5 +412,7 @@ def get_data_by_user_id(cursor, user_id, type):
 
 
 
+
     data = {}
     data.update( dict(len[getblabla(user_id,question)['question']))
+
