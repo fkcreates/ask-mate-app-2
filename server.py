@@ -428,7 +428,6 @@ def user_registration():
         return redirect(url_for('user_login'))
 
 
-<<<<<<< HEAD
 @app.route('/search')
 def search_in_questions():
     user = util.check_if_logged_in()
@@ -443,7 +442,8 @@ def search_in_questions():
         return render_template('question_search_result.html',
                                search_error_message='No search result!',
                                user=user)
-=======
+
+
 @app.route('/list_users')
 def list_users():
     user = util.check_if_logged_in()
@@ -468,7 +468,6 @@ def user_page(user_name):
     # order_by=order_by,
     # order=order,
     # user=user
->>>>>>> development
 
 
 if __name__ == "__main__":
