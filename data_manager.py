@@ -408,3 +408,9 @@ def get_data_by_user_id(cursor, user_id, type):
                        {'user_id': user_id})
         data = cursor.fetchall()
         return data
+
+
+
+
+    data = {}
+    data.update( dict(len[getblabla(user_id,question)['question']))
