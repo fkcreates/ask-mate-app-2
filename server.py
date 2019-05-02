@@ -21,7 +21,6 @@ def get_last_5_questions_by_time():
 @app.route('/list')
 def list_question():
     user = util.check_if_logged_in()
-
     order_by_options = {'submission_time': 'Submission time', 'view_number': 'View number',
                         'vote_number': 'Vote number', 'title': 'Title'}
     order_options = ['DESC', 'ASC']
@@ -61,7 +60,6 @@ def display_question(question_id):
 
 @app.route('/question-by-answer-id/<int:answer_id>')
 def get_question_by_answer_id(answer_id):
-
     answer_by_id = data_manager.question_by_answer_id(answer_id)
     return redirect(url_for('display_question',
                             question_id=answer_by_id['question_id']))
@@ -454,27 +452,54 @@ def search_in_questions():
 @app.route('/list_users')
 def list_users():
     user = util.check_if_logged_in()
-    data = data_manager.get_users()
-    return render_template("user_list.html", data=data, title="Users", user=user)
+    users = data_manager.get_users()
+    activities_of_a_user = {}
+    number_of_user_activities = {}
+    new_users = []
+    for one_user in users:
+        activities_of_a_user.update(util.get_all_user_activities(one_user['user_name']))
+
+        # for one_user in users:
+        #     number_of_user_activities.update(util.get_number_of_user_activities(one_user['user_name']))
+        # print(activities_of_a_user)
+        # print(number_of_user_activities)
+        # return render_template("user_list.html",
+        #                        users=users,
+        #                        title="Users",
+        #                        user=user,
+        #                        activities_of_a_user=activities_of_a_user,
+        #                        number_of_user_activities=number_of_user_activities)
+        number_of_questions = len(activities_of_a_user['questions'])
+
+        number_of_answers = len(activities_of_a_user['answers'])
+
+        number_of_comments = len(activities_of_a_user['comments'])
+
+        new_users.append({"number_of_questions": number_of_questions, "number_of_answers": number_of_answers,
+                          "number_of_comments": number_of_comments})
+
+    print(users)
+
+    return render_template("user_list.html",
+                           users=users,
+                           title="Users",
+                           user=user,
+                           activities_of_a_user=activities_of_a_user,
+                           new_users=new_users)
 
 
 @app.route('/user_page/<user_name>')
 def user_page(user_name):
     user = util.check_if_logged_in()
-    # user_name = request.args.get('user_name')
     user_row = data_manager.get_user_id_by_name(user_name)
     user_id = user_row[0]['id']
     questions = data_manager.get_data_by_user_id(user_id, 'question')
     answers = data_manager.get_data_by_user_id(user_id, 'answer')
     comments = data_manager.get_data_by_user_id(user_id, 'comment')
+
     return render_template("user_page.html", user_name=user_name,
                            questions=questions, answers=answers, comments=comments,
                            title="List questions", user=user)
-    # select_options=order_by_options,x
-    # order_options=order_options,
-    # order_by=order_by,
-    # order=order,
-    # user=user
 
 @app.route('/approve-answer/<answer_id>')
 def approve_answer(answer_id):

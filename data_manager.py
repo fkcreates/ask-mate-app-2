@@ -47,6 +47,7 @@ def get_answer_by_answer_id(cursor, answer_id):
     return answer
 
 
+
 @connection.connection_handler
 def question_by_answer_id(cursor, answer_id):
     cursor.execute("""
@@ -57,6 +58,7 @@ def question_by_answer_id(cursor, answer_id):
 
     answer = cursor.fetchall()
     return answer[0]
+
 
 
 @connection.connection_handler
@@ -395,9 +397,6 @@ def get_users(cursor):
                         SELECT user_name, reg_date, reputation
                         FROM userdata;
                         """, )
-    # {'user_name': user_name,
-    #  'reg_date': reg_date,
-    #  'reputation': reputation})
 
     return cursor.fetchall()
 
@@ -427,6 +426,7 @@ def get_data_by_user_id(cursor, user_id, type):
         data = cursor.fetchall()
         return data
 
+
 @connection.connection_handler
 def approve_answer(cursor, answer_id):
     cursor.execute("""
@@ -435,3 +435,4 @@ def approve_answer(cursor, answer_id):
                 WHERE id = %(answer_id)s;
                 """,
                 {'answer_id': answer_id})
+

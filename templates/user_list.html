@@ -5,21 +5,41 @@
 {% endblock %}
 
 {% block content %}
-    <table>
-        <tr>
-            <th>User Name</th>
-            <th>Registered</th>
-            <th>Reputation</th>
-        </tr>
-        {% for row in data %}
+    <div class="containter">
+        <table class="left_table">
             <tr>
-                <td><a href="{{ url_for('user_page', user_name=row["user_name"]) }}"> {{ row["user_name"] }} </a></td>
-                <td>{{ row["reg_date"] }}</td>
-                <td>{{ row["reputation"] }}</td>
-            </tr>
-        {% endfor %}
+                <th>User Name</th>
+                <th>Registered</th>
+                <th>Reputation</th>
 
-    </table>
+
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ url_for('user_page', user_name=user["user_name"]) }}"> {{ user["user_name"] }} </a>
+                    </td>
+                    <td>{{ user["reg_date"] }}</td>
+                    <td>{{ user["reputation"] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <table class="right_table">
+            <tr>
+                <th>Questions</th>
+                <th>Answers</th>
+                <th>Comments</th>
+            </tr>
+
+            {% for user in new_users %}
+                <tr>
+                    <td>{{ user['number_of_questions'] }}</td>
+                    <td>{{ user['number_of_answers'] }}</td>
+                    <td>{{ user['number_of_comments'] }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
     <p><a href="{{ url_for("get_last_5_questions_by_time") }}">Go back to main page</a></p>
 
 {% endblock %}
