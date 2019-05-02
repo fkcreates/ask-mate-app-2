@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+
     {% if user == None %}
         <button><a href="{{ url_for("route_user_login") }}">Login</a></button>
         <button><a href="{{ url_for('route_user_registration') }}">Register</a></button>
@@ -37,12 +38,15 @@
             <p>
                 <button type="submit">Sort</button>
             </p>
+
         </form>
-    </p>
+        </p>
     {% endif %}
+
 
 <table>
     <thead>
+
         <tr>
             <th>Submission<br>time</th>
             <th>View<br>number</th>
@@ -50,25 +54,29 @@
             <th>Title</th>
             <th>Vote</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for row in data %}
-        <tr>
-            <td>{{ row["submission_time"] }}</td>
-            <td>{{ row["view_number"] }}</td>
-            <td>{{ row["vote_number"] }}</td>
-            <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
-            <td>
-                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='up', title=title) }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
-                <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='down', title=title) }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-    {% if "Main page" == title %}
-        <p><a href="{{ url_for('list_question', order_by = 'submission_time', order = 'DESC') }}">List all questions!</a></p>
-        {% else %}
-        <p><a href="{{ url_for('get_last_5_questions_by_time') }}">Go to the main page!</a></p>
-    {% endif %}
+        </thead>
+        <tbody>
+        {% for row in data %}
+            <tr>
+                <td>{{ row["submission_time"] }}</td>
+                <td>{{ row["view_number"] }}</td>
+                <td>{{ row["vote_number"] }}</td>
+                <td><a href="{{ url_for('display_question', question_id=row['id']) }}">{{ row["title"] }}</a></td>
+                <td>
+                    <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='up', title=title) }}"><img
+                            src="/static/like.png" width="30" height="30" alt="Like"></a>
+                    <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='down', title=title) }}"><img
+                            src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p><a href={{ url_for ("list_users") }}> List users</a></p>
+            {% if "Main page" == title %}
+                <p><a href="{{ url_for('list_question', order_by = 'submission_time', order = 'DESC') }}">List all
+                questions!</a></p>
+            {% else %}
+                <p><a href="{{ url_for('get_last_5_questions_by_time') }}">Go to the main page!</a></p>
+            {% endif %}
 {% endblock %}
