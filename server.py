@@ -11,6 +11,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def get_last_5_questions_by_time():
     questions = data_manager.get_last_five_question_by_time()
     user = util.check_if_logged_in()
+
     return render_template("list_questions.html",
                            data=questions,
                            title="Main page",
@@ -98,7 +99,8 @@ def confirm_delete_question(question_id):
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
 def delete_question(question_id):
-    data_manager.delete_question(question_id)
+    answer_id = data_manager.get_answer_id_by_question(question_id)
+    data_manager.delete_question(question_id, answer_id['id'])
 
     return redirect(url_for("list_question"))
 
