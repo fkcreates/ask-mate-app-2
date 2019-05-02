@@ -41,6 +41,9 @@ def list_question():
 @app.route('/question/<int:question_id>')
 def display_question(question_id):
     question = data_manager.display_question(question_id)
+    for data in question:
+        question_user_id = data['user_id']
+
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
     data_manager.increase_view_number(question_id)
@@ -52,7 +55,8 @@ def display_question(question_id):
                            answers=answers,
                            comments=comments,
                            title="Display question",
-                           user=user)
+                           user=user,
+                           question_user_id=question_user_id)
 
 
 @app.route('/question-by-answer-id/<int:answer_id>')
@@ -471,6 +475,14 @@ def user_page(user_name):
     # order_by=order_by,
     # order=order,
     # user=user
+
+@app.route('/approve-answer/<answer_id>')
+def approve_answer(answer_id):
+    question_id = request.args.get('question_id')
+    data_manager.approve_answer(answer_id)
+
+    return redirect(url_for('display_question',
+                            question_id=question_id))
 
 
 if __name__ == "__main__":

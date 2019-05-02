@@ -44,7 +44,7 @@
                 <td>{{ comment["message"] }}</td>
                 <td>{{ comment["edited_count"] }}</td>
                 {% if user != None and user['user_id'] == comment['user_id'] %}
-                    <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment["id"], question_id=question_id, answer_id=comment["answer_id"]) }}">Delete comment</a></td>
+                    <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment["id"], question_id=question_id, answer_id=comment["answer_id"]) }}"><img src="/static/thanos.png" width="40" height="60" alt="Delete"></a></td>
                 {% elif user['user_id'] != comment['user_id'] %}
                 <td>Not eligible to delete</td>
                 {% endif %}

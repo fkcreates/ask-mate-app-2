@@ -14,6 +14,8 @@
             <th>Vote<br>number</th>
             <th>Title</th>
             <th>Message</th>
+            <th>Edit question</th>
+            <th>Delete question</th>
         </tr>
         </thead>
         <tbody>
@@ -24,14 +26,17 @@
                 <td>{{ row["vote_number"] }}</td>
                 <td>{{ row["title"] }}</td>
                 <td>{{ row["message"] }}</td>
+                {% if user != None and user['user_id'] == row['user_id'] %}
+                    <td><a href="{{ url_for('route_edit_question', question_id=question_id) }}"><img src="/static/pencil.png" width="50" height="50" alt="Edit"></a></td>
+                    <td><a href="{{ url_for('confirm_delete_question', question_id=question_id) }}"><img src="/static/thanos.png" width="40" height="60" alt="Delete"></a></td>
+                {% elif user['user_id'] != row['user_id']%}
+                    <td>Not eligible to edit</td>
+                    <td>Not eligible to delete</td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {% if user != None and user['user_id'] == question[0]['user_id'] %}
-        <p><a href="{{ url_for('route_edit_question', question_id=question_id) }}">Edit this question</a></p>
-        <p><a href="{{ url_for('confirm_delete_question', question_id=question_id) }}">Delete question</a></p>
-    {% endif %}
     <br>
     <h3>Comments</h3>
     <table>
@@ -51,8 +56,8 @@
                 <td>{{ comment["message"] }}</td>
                 <td>{{ comment["edited_count"] }}</td>
                 {% if user != None and user['user_id'] == comment['user_id'] %}
-                    <td><a href="{{ url_for("route_edit_comment", comment_id=comment["id"], question_id=comment["question_id"]) }}">Edit comment</a></td>
-                    <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment['id'], question_id=comment["question_id"], answer_id=comment["answer_id"]) }}">Delete comment</a></td>
+                    <td><a href="{{ url_for("route_edit_comment", comment_id=comment["id"], question_id=comment["question_id"]) }}"><img src="/static/pencil.png" width="50" height="50" alt="Edit"></a></td>
+                    <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment['id'], question_id=comment["question_id"], answer_id=comment["answer_id"]) }}"><img src="/static/thanos.png" width="40" height="60" alt="Delete"></a></td>
                 {%  elif user['user_id'] != comment['user_id'] %}
                     <td>Not eligible to edit</td>
                     <td>Not eligible to delete</td>
@@ -88,22 +93,32 @@
                 <td>{{ answer["submission_time"] }}</td>
                 <td>{{ answer["vote_number"] }}</td>
                 <td>{{ answer["message"] }}</td>
+                {% if answer['approved'] == 'yes' %}
+                    <td><img src="/static/approved.png" width="60" height="60" alt="Approved"></td>
+                {% else %}
+                    {% if user != None and user['user_id'] == question_user_id %}
+                        <td><a href="{{ url_for('approve_answer', answer_id=answer['id'], question_id=answer['question_id']) }}">Approve answer</a></td>
+                    {% else %}
+                        <td>Not eligible to approve</td>
+                    {% endif %}
+                {% endif %}
+
+
+
                 {% if user != None and user['user_id'] == answer['user_id'] %}
-                    <td>Approve this</td>
-                    <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"], question_id=question_id) }}">Edit answer</a></td>
-                    <td><a href="{{ url_for('confirm_delete_answer', answer_id=answer["id"], question_id=answer["question_id"]) }}">Delete answer</a></td>
+                    <td><a href="{{ url_for('route_edit_answer', answer_id=answer["id"], question_id=question_id) }}"><img src="/static/pencil.png" width="50" height="50" alt="Edit"></a></td>
+                    <td><a href="{{ url_for('confirm_delete_answer', answer_id=answer["id"], question_id=answer["question_id"]) }}"><img src="/static/thanos.png" width="40" height="60" alt="Delete"></a></td>
                 {%  elif user['user_id'] != answer['user_id'] %}
-                    <td>Not eligible to approve</td>
                     <td>Not eligible to edit</td>
                     <td>Not eligible to delete</td>
                 {% endif %}
                 {% if user != None %}
                     <td>
-                        <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='up') }}"><img src="/static/like.png" width="30" height="30" alt="Like"></a>
-                        <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='down') }}"><img src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+                        <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='up') }}"><img src="/static/like.png" width="40" height="40" alt="Like"></a>
+                        <a href="{{ url_for('vote_for_answer', answer_id=answer['id'], question_id=question_id, vote_type='down') }}"><img src="/static/dislike.png" width="35" height="35" alt="Dislike"></a>
                     </td>
                 {% endif %}
-                <td><a href="{{ url_for('show_answer_and_comments', answer_id=answer["id"], question_id=question_id) }}">Check comments</a></td>
+                <td><a href="{{ url_for('show_answer_and_comments', answer_id=answer["id"], question_id=question_id) }}"><img src="/static/check2.png" width="40" height="40" alt="Check"></a></td>
             </tr>
         {% endfor %}
         </tbody>

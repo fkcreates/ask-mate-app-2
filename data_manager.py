@@ -19,6 +19,7 @@ def display_question(cursor, question_id):
                     """,
                    {'question_id': question_id})
     question = cursor.fetchall()
+    print(question)
     return question
 
 
@@ -425,3 +426,12 @@ def get_data_by_user_id(cursor, user_id, type):
                        {'user_id': user_id})
         data = cursor.fetchall()
         return data
+
+@connection.connection_handler
+def approve_answer(cursor, answer_id):
+    cursor.execute("""
+                UPDATE answer
+                SET approved = 'yes'
+                WHERE id = %(answer_id)s;
+                """,
+                {'answer_id': answer_id})
