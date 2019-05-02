@@ -55,8 +55,6 @@
                         <a href="{{ url_for('show_answer_and_comments', question_id=row['question_id'], answer_id=row['answer_id']) }}">{{ row['message'] }}</a>
                     </td>
                 {% endif %}
-                <td> {{ row['question_id'] }}</td>
-                <td> {{ row['answer_id'] }}</td>
             </tr>
         {% endfor %}
     </table>
