@@ -18,7 +18,12 @@
         <a href="{{ url_for('route_question') }}">Add new question</a>
     </p>
     {% if title == "List questions" %}
-
+    <p>
+        <form action="{{ url_for('search_in_questions', search_for=search_for) }}" method="GET">
+            <input type="text" name="search_for" required>
+            <button type="submit">Search</button>
+        </form>
+    </p>
     <p>
         <form action="{{ url_for('list_question', order_by=order_by, order=order) }}" method="GET">
             <label for="order_by">Sort questions by: </label>
