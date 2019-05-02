@@ -29,6 +29,8 @@
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }} </a>
                     </td>
+
+
                 {% endif %}
                 <td> {{ row['question_id'] }}</td>
             </tr>

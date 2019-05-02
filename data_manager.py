@@ -53,8 +53,8 @@ def question_by_answer_id(cursor, answer_id):
                     """,
                    {'answer_id': answer_id})
 
-    question_id = cursor.fetchone()['question_id']
-    return display_question(question_id)
+    answer = cursor.fetchall()
+    return answer[0]
 
 
 @connection.connection_handler
