@@ -45,6 +45,7 @@ def get_answer_by_answer_id(cursor, answer_id):
     answer = cursor.fetchall()
     return answer
 
+
 @connection.connection_handler
 def question_by_answer_id(cursor, answer_id):
     cursor.execute("""
@@ -362,7 +363,6 @@ def check_if_username_in_the_database(cursor, user_name):
 
 
 @connection.connection_handler
-<<<<<<< HEAD
 def search_for_text_in_question(cursor, text):
     cursor.execute(f"""
                     SELECT id, submission_time, view_number, vote_number, title, message FROM question
@@ -372,7 +372,7 @@ def search_for_text_in_question(cursor, text):
     result = cursor.fetchall()
     return result
 
-=======
+@connection.connection_handler
 def get_users(cursor):
     cursor.execute("""
                         SELECT user_name, reg_date, reputation
@@ -409,4 +409,3 @@ def get_data_by_user_id(cursor, user_id, type):
                        {'user_id': user_id})
         data = cursor.fetchall()
         return data
->>>>>>> development
