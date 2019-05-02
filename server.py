@@ -449,7 +449,6 @@ def user_page(user_name):
     questions = data_manager.get_data_by_user_id(user_id, 'question')
     answers = data_manager.get_data_by_user_id(user_id, 'answer')
     comments = data_manager.get_data_by_user_id(user_id, 'comment')
-    print(comments)
     return render_template("user_page.html", user_name=user_name,
                            questions=questions, answers=answers, comments=comments,
                            title="List questions", user=user)
