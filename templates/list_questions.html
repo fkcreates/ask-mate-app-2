@@ -7,10 +7,16 @@
 {% block content %}
 
     {% if user == None %}
-        <button><a href="{{ url_for("route_user_login") }}">Login</a></button>
-        <button><a href="{{ url_for('route_user_registration') }}">Register</a></button>
+        <form method="get" action="{{ url_for("route_user_login") }}">
+            <button type="submit">Login</button>
+        </form>
+        <form method="get" action="{{ url_for("route_user_registration") }}">
+            <button type="submit">Register</button>
+        </form>
     {% else %}
-        <button><a href="{{ url_for("route_user_logout") }}">Logout</a></button>
+        <form method="get" action="{{ url_for("route_user_logout") }}">
+            <button type="submit">Logout</button>
+        </form>
     {% endif %}
 
 <h1>{{ title }}</h1>
@@ -18,7 +24,12 @@
         <a href="{{ url_for('route_question') }}">Add new question</a>
     </p>
     {% if title == "List questions" %}
-
+    <p>
+        <form action="{{ url_for('search_in_questions', search_for=search_for) }}" method="GET">
+            <input type="text" name="search_for" required>
+            <button type="submit">Search</button>
+        </form>
+    </p>
     <p>
         <form action="{{ url_for('list_question', order_by=order_by, order=order) }}" method="GET">
             <label for="order_by">Sort questions by: </label>

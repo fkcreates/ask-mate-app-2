@@ -45,6 +45,21 @@ def get_answer_by_answer_id(cursor, answer_id):
     answer = cursor.fetchall()
     return answer
 
+<<<<<<< HEAD
+=======
+
+@connection.connection_handler
+def question_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+
+    answer = cursor.fetchall()
+    return answer[0]
+
+>>>>>>> development
 
 @connection.connection_handler
 def route_edit_question(cursor, question_id):
@@ -349,6 +364,16 @@ def check_if_username_in_the_database(cursor, user_name):
     check_data = cursor.fetchall()
     return check_data
 
+
+@connection.connection_handler
+def search_for_text_in_question(cursor, text):
+    cursor.execute(f"""
+                    SELECT id, submission_time, view_number, vote_number, title, message FROM question
+                    WHERE LOWER (title) LIKE '%{text}%'
+                    ORDER BY vote_number DESC ;
+                    """)
+    result = cursor.fetchall()
+    return result
 
 @connection.connection_handler
 def get_users(cursor):

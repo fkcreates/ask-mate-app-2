@@ -53,6 +53,17 @@ def display_question(question_id):
                            user=user)
 
 
+<<<<<<< HEAD
+=======
+@app.route('/question-by-answer-id/<int:answer_id>')
+def get_question_by_answer_id(answer_id):
+
+    answer_by_id = data_manager.question_by_answer_id(answer_id)
+    return redirect(url_for('display_question',
+                            question_id=answer_by_id['question_id']))
+
+
+>>>>>>> development
 @app.route('/add-question', methods=["GET"])
 def route_question():
     user = util.check_if_logged_in()
@@ -381,7 +392,7 @@ def user_login():
             return render_template('login_page.html',
                                    message=message)
 
-    elif hashed_pw == None:
+    elif hashed_pw is None:
         message = "User name or password is incorrect"
         return render_template('login_page.html',
                                message=message)
@@ -420,6 +431,22 @@ def user_registration():
         return redirect(url_for('user_login'))
 
 
+@app.route('/search')
+def search_in_questions():
+    user = util.check_if_logged_in()
+    text_to_search = request.args.get("search_for").lower()
+    data = data_manager.search_for_text_in_question(text_to_search)
+    if len(data) > 0:
+        return render_template('question_search_result.html',
+                               data=data,
+                               title='Search result',
+                               user=user)
+    else:
+        return render_template('question_search_result.html',
+                               search_error_message='No search result!',
+                               user=user)
+
+
 @app.route('/list_users')
 def list_users():
     user = util.check_if_logged_in()
@@ -438,6 +465,14 @@ def user_page(user_name):
     return render_template("user_page.html", user_name=user_name,
                            questions=questions, answers=answers, comments=comments,
                            title="List questions", user=user)
+<<<<<<< HEAD
+=======
+    # select_options=order_by_options,x
+    # order_options=order_options,
+    # order_by=order_by,
+    # order=order,
+    # user=user
+>>>>>>> development
 
 
 if __name__ == "__main__":
@@ -446,4 +481,3 @@ if __name__ == "__main__":
         port=8000,
         debug=True
     )
-pass

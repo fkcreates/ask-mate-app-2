@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block content %}
+    {% if search_error_message is defined %}
+        {{ search_error_message }}
+    {% else %}
+        <h1>{{ title }}</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Submission<br>time</th>
+                    <th>View<br>number</th>
+                    <th>Vote<br>number</th>
+                    <th>Title</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for result in data %}
+                <tr>
+                    <td>{{ result.submission_time }}</td>
+                    <td>{{ result.view_number }}</td>
+                    <td>{{ result.vote_number }}</td>
+                    <td><a href="{{ url_for('display_question', question_id=result.id) }}">{{ result.title }}<a/></td>
+                    <td>{{ result.message }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <p>
+        <a href="{{ url_for('list_question', order_by = 'submission_time', order = 'DESC') }}">Go back!</a>
+    </p>
+{% endblock %}

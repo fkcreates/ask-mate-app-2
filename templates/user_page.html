@@ -24,10 +24,14 @@
         </thead>
         {% for row in answers %}
             <tr>
-                <td>{{ row['submission_time'] }}</td>
+                <td>{{ row["submission_time"] }}</td>
+                {% if row['question_id'] %}
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }} </a>
                     </td>
+
+
+                {% endif %}
                 <td> {{ row['question_id'] }}</td>
             </tr>
         {% endfor %}
@@ -43,7 +47,7 @@
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row['message'] }}</a>
                     </td>
-                {% else %}
+                {% elif row['answer_id'] %}
                     <td>
                         <a href="{{ url_for('show_answer_and_comments', question_id=row['question_id'], answer_id=row['answer_id']) }}">{{ row['message'] }}</a>
                     </td>
