@@ -128,6 +128,7 @@ ALTER TABLE ONLY comment
     ADD CONSTRAINT fk_userdata_id FOREIGN KEY (user_id) REFERENCES userdata(id);
 
 INSERT INTO userdata VALUES (1, 'admin', '$2b$12$BTZSgrWkKCcnYYYCyT5QJ.Dqav2qbZPLhUOZNw3OP0tC7bffjW6be', '2015-05-02 16:55:00', 1000);
+INSERT INTO userdata VALUES (2, 'kiscica', '$2b$12$m4wLDEQEg163XJUkhGk3BOpdKOMQsBYtgatRAqMZSJ3kHBP28C24C', '2015-05-02 16:55:00', 250);
 SELECT pg_catalog.setval('userdata_id_seq', 1, true);
 
 INSERT INTO question VALUES (0, '2017-04-28 08:29:00', 29, 7, 'How to make lists in Python?', 'I am totally new to this, any hints?', NULL, 1);
@@ -148,7 +149,7 @@ INSERT INTO answer VALUES (1, '2017-04-28 16:49:00', 4, 1, 'You need to use brac
 INSERT INTO answer VALUES (2, '2017-04-25 14:42:00', 35, 1, 'Look it up in the Python docs', 'images/image2.jpg', 1, 'no');
 SELECT pg_catalog.setval('answer_id_seq', 2, true);
 
-INSERT INTO comment VALUES (1, 0, NULL, 'Please clarify the question as it is too vague!', '2017-05-01 05:49:00', NULL, 1);
+INSERT INTO comment VALUES (1, 1, NULL, 'Please clarify the question as it is too vague!', '2017-05-01 05:49:00', NULL, 1);
 INSERT INTO comment VALUES (2, NULL, 1, 'I think you could use my_list = list() as well.', '2017-05-02 16:55:00', NULL, 1);
 SELECT pg_catalog.setval('comment_id_seq', 2, true);
 

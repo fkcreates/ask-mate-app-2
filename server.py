@@ -99,8 +99,8 @@ def confirm_delete_question(question_id):
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
 def delete_question(question_id):
-    answer = data_manager.get_answer_id_by_question(question_id)
-    data_manager.delete_question(question_id, answer['id'])
+    answer_id = data_manager.get_answer_id_by_question(question_id)
+    data_manager.delete_question(question_id, answer_id['id'])
 
     return redirect(url_for("list_question"))
 

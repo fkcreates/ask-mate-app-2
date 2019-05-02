@@ -243,11 +243,12 @@ def get_answer_id_by_question(cursor, question_id):
                     JOIN question ON (%(question_id)s = answer.question_id);
                     """,
                    {'question_id': question_id})
-    answers = cursor.fetchall()
-    if len(answers) > 0:
-        return answers[0]
+    answer_id = cursor.fetchall()
+    if len(answer_id) > 0:
+        return answer_id[0]
     else:
-        return None
+        answer_id = {'id': None}
+        return answer_id
 
 
 @connection.connection_handler
