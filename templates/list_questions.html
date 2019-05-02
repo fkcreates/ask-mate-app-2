@@ -7,10 +7,16 @@
 {% block content %}
 
     {% if user == None %}
-        <button><a href="{{ url_for("route_user_login") }}">Login</a></button>
-        <button><a href="{{ url_for('route_user_registration') }}">Register</a></button>
+        <form method="get" action="{{ url_for("route_user_login") }}">
+            <button type="submit">Login</button>
+        </form>
+        <form method="get" action="{{ url_for("route_user_registration") }}">
+            <button type="submit">Register</button>
+        </form>
     {% else %}
-        <button><a href="{{ url_for("route_user_logout") }}">Logout</a></button>
+        <form method="get" action="{{ url_for("route_user_logout") }}">
+            <button type="submit">Logout</button>
+        </form>
     {% endif %}
 
 <h1>{{ title }}</h1>
