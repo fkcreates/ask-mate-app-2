@@ -45,8 +45,7 @@ def get_answer_by_answer_id(cursor, answer_id):
     answer = cursor.fetchall()
     return answer
 
-<<<<<<< HEAD
-=======
+
 
 @connection.connection_handler
 def question_by_answer_id(cursor, answer_id):
@@ -59,7 +58,7 @@ def question_by_answer_id(cursor, answer_id):
     answer = cursor.fetchall()
     return answer[0]
 
->>>>>>> development
+
 
 @connection.connection_handler
 def route_edit_question(cursor, question_id):

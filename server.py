@@ -62,7 +62,7 @@ def get_question_by_answer_id(answer_id):
                             question_id=answer_by_id['question_id']))
 
 
->>>>>>> development
+
 @app.route('/add-question', methods=["GET"])
 def route_question():
     user = util.check_if_logged_in()
