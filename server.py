@@ -472,6 +472,14 @@ def user_page(user_name):
     # order=order,
     # user=user
 
+@app.route('/approve-answer/<answer_id>')
+def approve_answer(answer_id):
+    question_id = request.args.get('question_id')
+    data_manager.approve_answer(answer_id)
+
+    return redirect(url_for('display_question',
+                            question_id=question_id))
+
 
 if __name__ == "__main__":
     app.run(
