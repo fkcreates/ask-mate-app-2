@@ -56,10 +56,11 @@ def display_question(question_id):
                            user=user)
 
 
-@app.route('/get_question_by_answer_id')
+@app.route('/question-by-answer-id/<int:answer_id>')
 def get_question_by_answer_id(answer_id):
-    question_id = data_manager.question_by_answer_id(answer_id)
-    display_question(question_id)
+    answer_by_id = data_manager.question_by_answer_id(answer_id)
+    return redirect(url_for('display_question',
+                            question_id=answer_by_id['question_id']))
 
 @app.route('/add-question', methods=["GET"])
 def route_question():
@@ -448,10 +449,11 @@ def user_page(user_name):
     questions = data_manager.get_data_by_user_id(user_id, 'question')
     answers = data_manager.get_data_by_user_id(user_id, 'answer')
     comments = data_manager.get_data_by_user_id(user_id, 'comment')
+    print(comments)
     return render_template("user_page.html", user_name=user_name,
                            questions=questions, answers=answers, comments=comments,
                            title="List questions", user=user)
-    # select_options=order_by_options,
+    # select_options=order_by_options,x
     # order_options=order_options,
     # order_by=order_by,
     # order=order,

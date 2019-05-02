@@ -29,9 +29,9 @@
                     <td>
                         <a href="{{ url_for('display_question', question_id=row['question_id']) }}">{{ row["message"] }} </a>
                     </td>
-                {% elif row['answer_id'] %}
+                {% elif row['id'] %}
                     <td>
-                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }} </a>
+                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['id']) }}">{{ row["message"] }} </a>
                     </td>
                 {% endif %}
                 <td> {{ row['question_id'] }}</td>
@@ -51,7 +51,7 @@
                     </td>
                 {% else %}
                     <td>
-                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["message"] }}</a>
+                        <a href="{{ url_for('get_question_by_answer_id', answer_id=row['answer_id']) }}">{{ row["answer_id"] }}</a>
                     </td>
                 {% endif %}
             </tr>
