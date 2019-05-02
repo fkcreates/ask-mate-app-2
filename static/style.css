@@ -5,6 +5,21 @@ h1 {
     letter-spacing: 5px;
 }
 
+.containter {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0px;
+}
+
+}
+
+.left_table {
+    grid-column-start: 1;
+}
+
+.right_table {
+    grid-column-start: 2;
+}
 
 h3 {
     color: #11557C;
