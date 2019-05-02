@@ -353,10 +353,12 @@ def edit_comment(comment_id):
                             question_id=question_id,
                             user=user))
 
+
 @app.route('/login', methods=["GET"])
 def route_user_login():
 
     return render_template('login_page.html')
+
 
 @app.route('/login', methods=["POST"])
 def user_login():
@@ -378,11 +380,11 @@ def user_login():
             message = "User name or password is incorrect"
             return render_template('login_page.html',
                                    message=message)
-
-    elif hashed_pw == None:
+    elif hashed_pw is None:
         message = "User name or password is incorrect"
         return render_template('login_page.html',
                                message=message)
+
 
 @app.route('/route_user_logout')
 def route_user_logout():
@@ -417,10 +419,25 @@ def user_registration():
         return redirect(url_for('user_login'))
 
 
+@app.route('/search')
+def search_in_questions():
+    user = util.check_if_logged_in()
+    text_to_search = request.args.get("search_for").lower()
+    data = data_manager.search_for_text_in_question(text_to_search)
+    if len(data) > 0:
+        return render_template('question_search_result.html',
+                               data=data,
+                               title='Search result',
+                               user=user)
+    else:
+        return render_template('question_search_result.html',
+                               search_error_message='No search result!',
+                               user=user)
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=8000,
         debug=True
     )
-pass
