@@ -53,8 +53,7 @@ def display_question(question_id):
                            user=user)
 
 
-<<<<<<< HEAD
-=======
+
 @app.route('/question-by-answer-id/<int:answer_id>')
 def get_question_by_answer_id(answer_id):
 
@@ -465,14 +464,7 @@ def user_page(user_name):
     return render_template("user_page.html", user_name=user_name,
                            questions=questions, answers=answers, comments=comments,
                            title="List questions", user=user)
-<<<<<<< HEAD
-=======
-    # select_options=order_by_options,x
-    # order_options=order_options,
-    # order_by=order_by,
-    # order=order,
-    # user=user
->>>>>>> development
+
 
 
 if __name__ == "__main__":
