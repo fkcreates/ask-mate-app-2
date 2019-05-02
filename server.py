@@ -41,6 +41,9 @@ def list_question():
 @app.route('/question/<int:question_id>')
 def display_question(question_id):
     question = data_manager.display_question(question_id)
+    for data in question:
+        question_user_id = data['user_id']
+
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
     data_manager.increase_view_number(question_id)
@@ -52,7 +55,8 @@ def display_question(question_id):
                            answers=answers,
                            comments=comments,
                            title="Display question",
-                           user=user)
+                           user=user,
+                           question_user_id=question_user_id)
 
 
 @app.route('/question-by-answer-id/<int:answer_id>')

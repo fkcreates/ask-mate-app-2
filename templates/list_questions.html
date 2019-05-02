@@ -80,9 +80,9 @@
                 {% if user != None %}
                     <td>
                         <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='up', title=title) }}"><img
-                                src="/static/like.png" width="30" height="30" alt="Like"></a>
+                                src="/static/like.png" width="40" height="40" alt="Like"></a>
                         <a href="{{ url_for('vote_for_question', question_id=row['id'], vote_type='down', title=title) }}"><img
-                                src="/static/dislike.png" width="30" height="30" alt="Dislike"></a>
+                                src="/static/dislike.png" width="35" height="35" alt="Dislike"></a>
                     </td>
                 {% endif %}
             </tr>

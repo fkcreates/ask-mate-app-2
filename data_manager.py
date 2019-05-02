@@ -19,6 +19,7 @@ def display_question(cursor, question_id):
                     """,
                    {'question_id': question_id})
     question = cursor.fetchall()
+    print(question)
     return question
 
 
