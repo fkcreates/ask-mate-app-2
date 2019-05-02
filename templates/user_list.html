@@ -13,15 +13,20 @@
             <th>Number of questions</th>
             <th>Number of answers</th>
             <th>Number of comments</th>
+
         </tr>
         {% for user in users %}
             <tr>
                 <td><a href="{{ url_for('user_page', user_name=user["user_name"]) }}"> {{ user["user_name"] }} </a></td>
-                <td>{{ user['user_name']["reg_date"] }}</td>
+                <td>{{ user["reg_date"] }}</td>
                 <td>{{ user["reputation"] }}</td>
-                <td>{{ user["number_of_questions"] }}</td>
-                <td>{{ user["number_of_answers"] }}</td>
-                <td>{{ user["number_of_comments"] }}</td>
+            </tr>
+        {% endfor %}
+        {% for user in new_users %}
+            <tr>
+                <td>{{ user['number_of_questions'] }}</td>
+                <td>{{ user['number_of_answers'] }}</td>
+                <td>{{ user['number_of_comments'] }}</td>
             </tr>
         {% endfor %}
 

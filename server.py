@@ -53,13 +53,11 @@ def display_question(question_id):
                            user=user)
 
 
-
 @app.route('/question-by-answer-id/<int:answer_id>')
 def get_question_by_answer_id(answer_id):
     answer_by_id = data_manager.question_by_answer_id(answer_id)
     return redirect(url_for('display_question',
                             question_id=answer_by_id['question_id']))
-
 
 
 @app.route('/add-question', methods=["GET"])
@@ -451,18 +449,37 @@ def list_users():
     users = data_manager.get_users()
     activities_of_a_user = {}
     number_of_user_activities = {}
+    new_users = []
     for one_user in users:
         activities_of_a_user.update(util.get_all_user_activities(one_user['user_name']))
-    for one_user in users:
-        number_of_user_activities.update(util.get_number_of_user_activities(one_user['user_name']))
-    print(activities_of_a_user)
-    print(number_of_user_activities)
+
+        # for one_user in users:
+        #     number_of_user_activities.update(util.get_number_of_user_activities(one_user['user_name']))
+        # print(activities_of_a_user)
+        # print(number_of_user_activities)
+        # return render_template("user_list.html",
+        #                        users=users,
+        #                        title="Users",
+        #                        user=user,
+        #                        activities_of_a_user=activities_of_a_user,
+        #                        number_of_user_activities=number_of_user_activities)
+        number_of_questions = len(activities_of_a_user['questions'])
+
+        number_of_answers = len(activities_of_a_user['answers'])
+
+        number_of_comments = len(activities_of_a_user['comments'])
+
+        new_users.append({"number_of_questions": number_of_questions, "number_of_answers": number_of_answers,
+                          "number_of_comments": number_of_comments})
+
+    print(users)
+
     return render_template("user_list.html",
                            users=users,
                            title="Users",
                            user=user,
                            activities_of_a_user=activities_of_a_user,
-                           number_of_user_activities=number_of_user_activities)
+                           new_users=new_users)
 
 
 @app.route('/user_page/<user_name>')
@@ -477,8 +494,6 @@ def user_page(user_name):
     return render_template("user_page.html", user_name=user_name,
                            questions=questions, answers=answers, comments=comments,
                            title="List questions", user=user)
-
-
 
 
 if __name__ == "__main__":
