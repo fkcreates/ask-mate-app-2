@@ -390,7 +390,7 @@ def user_login():
             return render_template('login_page.html',
                                    message=message)
 
-    elif hashed_pw == None:
+    elif hashed_pw is None:
         message = "User name or password is incorrect"
         return render_template('login_page.html',
                                message=message)
