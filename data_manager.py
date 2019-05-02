@@ -33,6 +33,7 @@ def get_answers_for_question(cursor, question_id):
     answers = cursor.fetchall()
     return answers
 
+
 @connection.connection_handler
 def get_answer_by_answer_id(cursor, answer_id):
     cursor.execute("""
@@ -43,6 +44,17 @@ def get_answer_by_answer_id(cursor, answer_id):
 
     answer = cursor.fetchall()
     return answer
+
+@connection.connection_handler
+def question_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+
+    answer = cursor.fetchall()
+    return answer[0]
 
 
 @connection.connection_handler
@@ -91,7 +103,7 @@ def add_new_data_to_table(cursor, dict, type):
                          """,
                        {'submission_time': dt,
                         'view_number': dict['view_number'],
-                        'vote_number':dict['vote_number'],
+                        'vote_number': dict['vote_number'],
                         'title': dict['title'],
                         'message': dict['message'],
                         'image': dict['image'],
@@ -139,7 +151,7 @@ def delete_answer(cursor, answer_id):
                 DELETE FROM answer
                 WHERE id = %(answer_id)s;
                 """,
-                {'answer_id': answer_id})
+                   {'answer_id': answer_id})
 
 
 @connection.connection_handler
@@ -262,6 +274,7 @@ def get_comments_for_answer(cursor, answer_id):
     comments = cursor.fetchall()
     return comments
 
+
 @connection.connection_handler
 def get_all_comments(cursor):
     cursor.execute("""
@@ -306,6 +319,7 @@ def edit_comment(cursor, comment_id, message):
                     'message': message,
                     'submission_time': dt})
 
+
 @connection.connection_handler
 def get_hashed_pw(cursor, user_name):
     cursor.execute("""
@@ -326,10 +340,11 @@ def get_hashed_pw(cursor, user_name):
 def get_user_id_by_name(cursor, user_name):
     cursor.execute("""
                     SELECT id FROM userdata
-                    WHERE user_name = %(user_name)s
+                    WHERE user_name = %(user_name)s;
                     """,
-                   {'user_name': user_name});
+                   {'user_name': user_name})
 
+    # user_id = cursor.fetchone()['id']
     user_id = cursor.fetchall()
     return user_id
 
@@ -347,6 +362,7 @@ def check_if_username_in_the_database(cursor, user_name):
 
 
 @connection.connection_handler
+<<<<<<< HEAD
 def search_for_text_in_question(cursor, text):
     cursor.execute(f"""
                     SELECT id, submission_time, view_number, vote_number, title, message FROM question
@@ -356,3 +372,41 @@ def search_for_text_in_question(cursor, text):
     result = cursor.fetchall()
     return result
 
+=======
+def get_users(cursor):
+    cursor.execute("""
+                        SELECT user_name, reg_date, reputation
+                        FROM userdata;
+                        """, )
+    # {'user_name': user_name,
+    #  'reg_date': reg_date,
+    #  'reputation': reputation})
+
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_data_by_user_id(cursor, user_id, type):
+    if type == 'question':
+        cursor.execute("""
+                        SELECT * FROM question
+                        WHERE user_id = %(user_id)s;
+                        """,
+                       {'user_id': user_id})
+        data = cursor.fetchall()
+        return data
+    if type == 'answer':
+        cursor.execute("""
+                        SELECT * FROM answer
+                        WHERE user_id = %(user_id)s;""",
+                       {'user_id': user_id})
+        data = cursor.fetchall()
+        return data
+    if type == 'comment':
+        cursor.execute("""
+                        SELECT * FROM comment
+                        WHERE user_id = %(user_id)s;""",
+                       {'user_id': user_id})
+        data = cursor.fetchall()
+        return data
+>>>>>>> development
