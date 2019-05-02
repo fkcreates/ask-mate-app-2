@@ -346,3 +346,13 @@ def check_if_username_in_the_database(cursor, user_name):
     return check_data
 
 
+@connection.connection_handler
+def search_for_text_in_question(cursor, text):
+    cursor.execute(f"""
+                    SELECT id, submission_time, view_number, vote_number, title, message FROM question
+                    WHERE LOWER (title) LIKE '%{text}%'
+                    ORDER BY vote_number DESC ;
+                    """)
+    result = cursor.fetchall()
+    return result
+
