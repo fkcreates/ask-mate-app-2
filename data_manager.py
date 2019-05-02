@@ -19,6 +19,7 @@ def display_question(cursor, question_id):
                     """,
                    {'question_id': question_id})
     question = cursor.fetchall()
+    print(question)
     return question
 
 
@@ -237,10 +238,25 @@ def get_last_five_question_by_time(cursor):
 
 
 @connection.connection_handler
-def delete_question(cursor, question_id):
+def get_answer_id_by_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT answer.id from answer
+                    JOIN question ON (%(question_id)s = answer.question_id);
+                    """,
+                   {'question_id': question_id})
+    answer_id = cursor.fetchall()
+    if len(answer_id) > 0:
+        return answer_id[0]
+    else:
+        answer_id = {'id': None}
+        return answer_id
+
+
+@connection.connection_handler
+def delete_question(cursor, question_id, answer_id):
     cursor.execute("""
                    DELETE FROM comment
-                   WHERE question_id = %(question_id)s;
+                   WHERE question_id = %(question_id)s OR answer_id = %(answer_id)s;
                    
                    DELETE FROM answer
                    WHERE question_id = %(question_id)s;
@@ -251,7 +267,8 @@ def delete_question(cursor, question_id):
                    DELETE FROM question
                    WHERE id = %(question_id)s;
                    """,
-                   {'question_id': question_id})
+                   {'question_id': question_id,
+                    'answer_id': answer_id})
 
 
 @connection.connection_handler
@@ -409,3 +426,12 @@ def get_data_by_user_id(cursor, user_id, type):
                        {'user_id': user_id})
         data = cursor.fetchall()
         return data
+
+@connection.connection_handler
+def approve_answer(cursor, answer_id):
+    cursor.execute("""
+                UPDATE answer
+                SET approved = 'yes'
+                WHERE id = %(answer_id)s;
+                """,
+                {'answer_id': answer_id})

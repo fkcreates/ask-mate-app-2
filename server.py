@@ -11,6 +11,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def get_last_5_questions_by_time():
     questions = data_manager.get_last_five_question_by_time()
     user = util.check_if_logged_in()
+
     return render_template("list_questions.html",
                            data=questions,
                            title="Main page",
@@ -40,6 +41,9 @@ def list_question():
 @app.route('/question/<int:question_id>')
 def display_question(question_id):
     question = data_manager.display_question(question_id)
+    for data in question:
+        question_user_id = data['user_id']
+
     answers = data_manager.get_answers_for_question(question_id)
     comments = data_manager.get_comments_for_question(question_id)
     data_manager.increase_view_number(question_id)
@@ -51,7 +55,8 @@ def display_question(question_id):
                            answers=answers,
                            comments=comments,
                            title="Display question",
-                           user=user)
+                           user=user,
+                           question_user_id=question_user_id)
 
 
 @app.route('/question-by-answer-id/<int:answer_id>')
@@ -98,7 +103,8 @@ def confirm_delete_question(question_id):
 
 @app.route('/question/<question_id>/are-you-sure', methods=["POST"])
 def delete_question(question_id):
-    data_manager.delete_question(question_id)
+    answer_id = data_manager.get_answer_id_by_question(question_id)
+    data_manager.delete_question(question_id, answer_id['id'])
 
     return redirect(url_for("list_question"))
 
@@ -469,6 +475,14 @@ def user_page(user_name):
     # order_by=order_by,
     # order=order,
     # user=user
+
+@app.route('/approve-answer/<answer_id>')
+def approve_answer(answer_id):
+    question_id = request.args.get('question_id')
+    data_manager.approve_answer(answer_id)
+
+    return redirect(url_for('display_question',
+                            question_id=question_id))
 
 
 if __name__ == "__main__":

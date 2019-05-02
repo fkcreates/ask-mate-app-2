@@ -43,13 +43,19 @@
                 <td>{{ comment["submission_time"] }}</td>
                 <td>{{ comment["message"] }}</td>
                 <td>{{ comment["edited_count"] }}</td>
-                <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment["id"], question_id=question_id, answer_id=comment["answer_id"]) }}">Delete comment</a></td>
+                {% if user != None and user['user_id'] == comment['user_id'] %}
+                    <td><a href="{{ url_for("confirm_delete_comment", comment_id=comment["id"], question_id=question_id, answer_id=comment["answer_id"]) }}"><img src="/static/thanos.png" width="40" height="60" alt="Delete"></a></td>
+                {% elif user['user_id'] != comment['user_id'] %}
+                <td>Not eligible to delete</td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
     </table>
+{% if user != None %}
     <p><a href="{{ url_for('route_new_answer_comment', answer_id=answer_id, question_id=question_id) }}">Add new comment</a></p>
-    <br>
-    <p><a href="{{ url_for('display_question', question_id=question_id) }}">Back to question</a></p>
+{% endif %}
+<br>
+<p><a href="{{ url_for('display_question', question_id=question_id) }}">Back to question</a></p>
 
 {% endblock %}
