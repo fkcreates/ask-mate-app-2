@@ -1,6 +1,10 @@
 # ask-mate-app-2
-Ask mate is a StackOverflow-like application, 2nd week's project in the Web module in CodeCool programming school.
+Ask mate is a StackOverflow-like application, so users can ask questions, answer the and comment as well. 
+Upvoting and downvoting features work as well. 
+There is a login option to separate registered users from non-registered users when using specific features.
 
-In this repository you can see the team's work that consists of 2 weeks work of 4 students.
+This was a 3 weeks-long project in the Web module in CodeCool programming school.
 
-We have mainly used Python, Flask and SQL database for this application.
+We have mainly used Python, Flask and SQL database to develop this application.
+
+
