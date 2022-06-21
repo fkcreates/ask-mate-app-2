@@ -21,7 +21,7 @@ kiwisolver==1.0.1
 MarkupSafe==1.1.1
 matplotlib==3.0.2
 mccabe==0.6.1
-numpy==1.16.0
+numpy==1.22.0
 parso==0.3.1
 pep8==1.7.1
 pexpect==4.6.0
